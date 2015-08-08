@@ -41,9 +41,7 @@
             this.viewFacesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewWireFrameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.resetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.selectOnOverIn3DToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectOnOverin3DToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutIfcviewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -127,9 +125,7 @@
             this.viewFacesToolStripMenuItem,
             this.viewWireFrameToolStripMenuItem,
             this.toolStripSeparator2,
-            this.resetToolStripMenuItem,
-            this.toolStripSeparator3,
-            this.selectOnOverIn3DToolStripMenuItem});
+            this.selectOnOverin3DToolStripMenuItem});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.viewToolStripMenuItem.Text = "View";
@@ -159,26 +155,14 @@
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
             // 
-            // resetToolStripMenuItem
+            // selectOnOverin3DToolStripMenuItem
             // 
-            this.resetToolStripMenuItem.Name = "resetToolStripMenuItem";
-            this.resetToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.resetToolStripMenuItem.Text = "Reset";
-            this.resetToolStripMenuItem.Click += new System.EventHandler(this.resetToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
-            // 
-            // selectOnOverIn3DToolStripMenuItem
-            // 
-            this.selectOnOverIn3DToolStripMenuItem.Checked = false;
-            this.selectOnOverIn3DToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Unchecked;
-            this.selectOnOverIn3DToolStripMenuItem.Name = "selectOnOverIn3DToolStripMenuItem";
-            this.selectOnOverIn3DToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.selectOnOverIn3DToolStripMenuItem.Text = "Select on Over in 3D";
-            this.selectOnOverIn3DToolStripMenuItem.Click += new System.EventHandler(this.selectOnOverIn3DToolStripMenuItem_Click);
+            this.selectOnOverin3DToolStripMenuItem.Checked = false;
+            this.selectOnOverin3DToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Unchecked;
+            this.selectOnOverin3DToolStripMenuItem.Name = "selectOnOverin3DToolStripMenuItem";
+            this.selectOnOverin3DToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.selectOnOverin3DToolStripMenuItem.Text = "Select on Over in 3D";
+            this.selectOnOverin3DToolStripMenuItem.Click += new System.EventHandler(this.selectOnOverin3DToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -231,7 +215,6 @@
             this.treeView1.SelectedImageIndex = 0;
             this.treeView1.Size = new System.Drawing.Size(113, 482);
             this.treeView1.TabIndex = 0;
-            this.treeView1.BeforeCheck += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView1_BeforeCheck);
             this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
             this.treeView1.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseClick);
             // 
@@ -260,7 +243,7 @@
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Untitled - ifcviewer";
-            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
             this.Load += new System.EventHandler(this.Form1_Load);
             this.contextMenuStrip1.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
@@ -287,11 +270,9 @@
         private System.Windows.Forms.ToolStripMenuItem viewFacesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewWireFrameToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripMenuItem resetToolStripMenuItem;
         private System.Windows.Forms.TreeView treeView1;
         private System.Windows.Forms.ImageList ilTreeIcons;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripMenuItem selectOnOverIn3DToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem selectOnOverin3DToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem eRRORToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutIfcviewerToolStripMenuItem;
     }

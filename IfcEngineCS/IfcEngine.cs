@@ -20,7 +20,7 @@ namespace IfcEngineCS
         {
             if (Environment.Is64BitProcess) {
                 #region File IO
-                _sdaiCloseModel = sdaiCloseModel_x32;
+                _sdaiCloseModel = sdaiCloseModel_x64;
                 _sdaiCreateModelBn = sdaiCreateModelBN_x64;
                 _sdaiCreateModelBn_byte = sdaiCreateModelBN_x64;
                 _sdaiCreateModelBn_unicode = sdaiCreateModelBNUnicode_x64;

@@ -141,7 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CIFCTreeData.cs" />
-    <Compile Include="IFCViewerWrapper.cs" />
+    <Compile Include="ViewController.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

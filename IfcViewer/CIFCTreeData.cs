@@ -80,7 +80,7 @@ namespace IFCViewer
         /// <summary>
         /// Viewer
         /// </summary>
-        IFCViewerWrapper _ifcViewer = null;
+        ViewController _ifcViewer = null;
 
         /// <summary>
         /// Model
@@ -123,7 +123,7 @@ namespace IFCViewer
         /// - Generates Header info
         /// - Generates check box per items
         /// </summary>
-        public void BuildTree(IFCViewerWrapper ifcViewer, IntPtr ifcModel, IFCItem ifcRoot, TreeView treeControl)
+        public void BuildTree(ViewController ifcViewer, IntPtr ifcModel, IFCItem ifcRoot, TreeView treeControl)
         {
             treeControl.Nodes.Clear();
 
@@ -305,7 +305,7 @@ namespace IFCViewer
         {
             // check for decomposition
             IntPtr decompositionInstance;
-            _ifcEngine.GetAttribute(iParentInstance, "IsDecomposedBy",IfcEngine.SdaiType.Aggregation, out decompositionInstance);
+            _ifcEngine.GetAttribute(iParentInstance, "IsDecomposedBy", IfcEngine.SdaiType.Aggregation, out decompositionInstance);
 
             if (decompositionInstance == IntPtr.Zero) {
                 return;
