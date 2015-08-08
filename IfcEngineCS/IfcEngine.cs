@@ -14,9 +14,9 @@ using System.Threading.Tasks;
 
 namespace IfcEngineCS
 {
-    public static partial class IfcEngine
+    public partial class IfcEngine
     {
-        static IfcEngine()
+        public IfcEngine()
         {
             if (Environment.Is64BitProcess) {
                 #region File IO
@@ -257,30 +257,30 @@ namespace IfcEngineCS
             }
         }
 
-        private static Encoding unicode = Encoding.Unicode;
+        static Encoding unicode = Encoding.Unicode;
         #region File IO
-        private static Delegates.sdaiCloseModel _sdaiCloseModel;
-        private static Delegates.sdaiCreateModelBN _sdaiCreateModelBn;
-        private static Delegates.sdaiCreateModelBN_byte _sdaiCreateModelBn_byte;
-        private static Delegates.sdaiCreateModelBNUnicode _sdaiCreateModelBn_unicode;
-        private static Delegates.sdaiOpenModelBN _sdaiOpenModelBn;
-        private static Delegates.sdaiOpenModelBN_byte _sdaiOpenModelBn_byte;
-        private static Delegates.sdaiOpenModelBNUnicode _sdaiOpenModelBn_unicode;
-        private static Delegates.sdaiSaveModelBN _sdaiSaveModelBn;
-        private static Delegates.sdaiSaveModelBN_byte _sdaiSaveModelBn_byte;
-        private static Delegates.sdaiSaveModelBNUnicode _sdaiSaveModelBn_unicode;
-        private static Delegates.sdaiSaveModelAsXmlBN _sdaiSaveModelAsXmlBn;
-        private static Delegates.sdaiSaveModelAsXmlBN_byte _sdaiSaveModelAsXmlBn_byte;
-        private static Delegates.sdaiSaveModelAsXmlBNUnicode _sdaiSaveModelAsXmlBn_unicode;
-        private static Delegates.sdaiSaveModelAsSimpleXmlBN _sdaiSaveModelAsSimpleXmlBn;
-        private static Delegates.sdaiSaveModelAsSimpleXmlBN_byte _sdaiSaveModelAsSimpleXmlBn_byte;
-        private static Delegates.sdaiSaveModelAsSimpleXmlBNUnicode _sdaiSaveModelAsSimpleXmlBn_unicode;
+        private Delegates.sdaiCloseModel _sdaiCloseModel;
+        private Delegates.sdaiCreateModelBN _sdaiCreateModelBn;
+        private Delegates.sdaiCreateModelBN_byte _sdaiCreateModelBn_byte;
+        private Delegates.sdaiCreateModelBNUnicode _sdaiCreateModelBn_unicode;
+        private Delegates.sdaiOpenModelBN _sdaiOpenModelBn;
+        private Delegates.sdaiOpenModelBN_byte _sdaiOpenModelBn_byte;
+        private Delegates.sdaiOpenModelBNUnicode _sdaiOpenModelBn_unicode;
+        private Delegates.sdaiSaveModelBN _sdaiSaveModelBn;
+        private Delegates.sdaiSaveModelBN_byte _sdaiSaveModelBn_byte;
+        private Delegates.sdaiSaveModelBNUnicode _sdaiSaveModelBn_unicode;
+        private Delegates.sdaiSaveModelAsXmlBN _sdaiSaveModelAsXmlBn;
+        private Delegates.sdaiSaveModelAsXmlBN_byte _sdaiSaveModelAsXmlBn_byte;
+        private Delegates.sdaiSaveModelAsXmlBNUnicode _sdaiSaveModelAsXmlBn_unicode;
+        private Delegates.sdaiSaveModelAsSimpleXmlBN _sdaiSaveModelAsSimpleXmlBn;
+        private Delegates.sdaiSaveModelAsSimpleXmlBN_byte _sdaiSaveModelAsSimpleXmlBn_byte;
+        private Delegates.sdaiSaveModelAsSimpleXmlBNUnicode _sdaiSaveModelAsSimpleXmlBn_unicode;
 
         /// <summary>
         /// This call can be used to close a model. Be aware that closing a model will release all memory allocated for this model, handles and strings allocated in the context of this model cannot be trusted anymore after this call.
         /// </summary>
         /// <param name="model"></param>
-        public static void CloseModel(IntPtr model)
+        public void CloseModel(IntPtr model)
         {
             if (_sdaiCloseModel == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -297,7 +297,7 @@ namespace IfcEngineCS
         /// <param name="schemaName"></param>
         /// <returns></returns>
         [Obsolete("Use carefully, cause it does not support file name with wide chars.")]
-        public static IntPtr CreateModel(IntPtr repository, string fileName, string schemaName)
+        public IntPtr CreateModel(IntPtr repository, string fileName, string schemaName)
         {
             if (_sdaiCreateModelBn == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -314,7 +314,7 @@ namespace IfcEngineCS
         /// <param name="schemaName"></param>
         /// <returns></returns>
         [Obsolete("Will be removed in next version.")]
-        public static IntPtr CreateModel(IntPtr repository, byte[] fileName, byte[] schemaName)
+        public IntPtr CreateModel(IntPtr repository, byte[] fileName, byte[] schemaName)
         {
             if (_sdaiCreateModelBn_byte == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -330,7 +330,7 @@ namespace IfcEngineCS
         /// <param name="fileName"></param>
         /// <param name="schemaName"></param>
         /// <returns></returns>
-        public static IntPtr CreateModelUnicode(IntPtr repository, string fileName, string schemaName)
+        public IntPtr CreateModelUnicode(IntPtr repository, string fileName, string schemaName)
         {
             if (_sdaiCreateModelBn_unicode == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -347,7 +347,7 @@ namespace IfcEngineCS
         /// <param name="schemaName"></param>
         /// <returns></returns>
         [Obsolete("Will be removed in next version.")]
-        public static IntPtr CreateModelUnicode(IntPtr repository, byte[] fileName, byte[] schemaName)
+        public IntPtr CreateModelUnicode(IntPtr repository, byte[] fileName, byte[] schemaName)
         {
             if (_sdaiCreateModelBn_unicode == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -364,7 +364,7 @@ namespace IfcEngineCS
         /// <param name="schemaName"></param>
         /// <returns></returns>
         [Obsolete("Use carefully, cause it does not support file name with wide chars.")]
-        public static IntPtr OpenModel(IntPtr repository, string fileName, string schemaName)
+        public IntPtr OpenModel(IntPtr repository, string fileName, string schemaName)
         {
             if (_sdaiOpenModelBn == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -381,7 +381,7 @@ namespace IfcEngineCS
         /// <param name="schemaName"></param>
         /// <returns></returns>
         [Obsolete("Will be removed in next version.")]
-        public static IntPtr OpenModel(IntPtr repository, byte[] fileName, byte[] schemaName)
+        public IntPtr OpenModel(IntPtr repository, byte[] fileName, byte[] schemaName)
         {
             if (_sdaiOpenModelBn_byte == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -397,7 +397,7 @@ namespace IfcEngineCS
         /// <param name="fileName"></param>
         /// <param name="schemaName"></param>
         /// <returns></returns>
-        public static IntPtr OpenModelUnicode(IntPtr repository, string fileName, string schemaName)
+        public IntPtr OpenModelUnicode(IntPtr repository, string fileName, string schemaName)
         {
             if (_sdaiOpenModelBn_unicode == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -413,7 +413,7 @@ namespace IfcEngineCS
         /// <param name="schemaName"></param>
         /// <returns></returns>
         [Obsolete("Will be removed in next version.")]
-        public static IntPtr OpenModelUnicode(IntPtr repository, byte[] fileName, byte[] schemaName)
+        public IntPtr OpenModelUnicode(IntPtr repository, byte[] fileName, byte[] schemaName)
         {
             if (_sdaiOpenModelBn_unicode == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -427,7 +427,7 @@ namespace IfcEngineCS
         /// <param name="model"></param>
         /// <param name="fileName"></param>
         [Obsolete("Use carefully, cause it does not support file name with wide chars.")]
-        public static void SaveModel(IntPtr model, string fileName)
+        public void SaveModel(IntPtr model, string fileName)
         {
             if (_sdaiSaveModelBn == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -442,7 +442,7 @@ namespace IfcEngineCS
         /// <param name="model"></param>
         /// <param name="fileName"></param>
         [Obsolete("Will be removed in next version.")]
-        public static void SaveModel(IntPtr model, byte[] fileName)
+        public void SaveModel(IntPtr model, byte[] fileName)
         {
             if (_sdaiSaveModelBn_byte == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -456,7 +456,7 @@ namespace IfcEngineCS
         /// </summary>
         /// <param name="model"></param>
         /// <param name="fileName"></param>
-        public static void SaveModelUnicode(IntPtr model, string fileName)
+        public void SaveModelUnicode(IntPtr model, string fileName)
         {
             if (_sdaiSaveModelBn_unicode == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -470,7 +470,7 @@ namespace IfcEngineCS
         /// <param name="model"></param>
         /// <param name="fileName"></param>
         [Obsolete("Will be removed in next version.")]
-        public static void SaveModelUnicode(IntPtr model, byte[] fileName)
+        public void SaveModelUnicode(IntPtr model, byte[] fileName)
         {
             if (_sdaiSaveModelBn_unicode == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -484,7 +484,7 @@ namespace IfcEngineCS
         /// <param name="model"></param>
         /// <param name="fileName"></param>
         [Obsolete("Use carefully, cause it does not support file name with wide chars.")]
-        public static void SaveModelAsXml(IntPtr model, string fileName)
+        public void SaveModelAsXml(IntPtr model, string fileName)
         {
             if (_sdaiSaveModelAsXmlBn == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -499,7 +499,7 @@ namespace IfcEngineCS
         /// <param name="model"></param>
         /// <param name="fileName"></param>
         [Obsolete("Will be removed in next version.")]
-        public static void SaveModelAsXml(IntPtr model, byte[] fileName)
+        public void SaveModelAsXml(IntPtr model, byte[] fileName)
         {
             if (_sdaiSaveModelAsXmlBn_byte == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -513,7 +513,7 @@ namespace IfcEngineCS
         /// </summary>
         /// <param name="model"></param>
         /// <param name="fileName"></param>
-        public static void SaveModelAsXmlUnicode(IntPtr model, string fileName)
+        public void SaveModelAsXmlUnicode(IntPtr model, string fileName)
         {
             if (_sdaiSaveModelAsXmlBn_unicode == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -527,7 +527,7 @@ namespace IfcEngineCS
         /// <param name="model"></param>
         /// <param name="fileName"></param>
         [Obsolete("Will be removed in next version.")]
-        public static void SaveModelAsXmlUnicode(IntPtr model, byte[] fileName)
+        public void SaveModelAsXmlUnicode(IntPtr model, byte[] fileName)
         {
             if (_sdaiSaveModelAsXmlBn_unicode == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -540,7 +540,7 @@ namespace IfcEngineCS
         /// <param name="model"></param>
         /// <param name="fileName"></param>
         [Obsolete("Use carefully, cause it does not support file name with wide chars.")]
-        public static void SaveModelAsSimpleXml(IntPtr model, string fileName)
+        public void SaveModelAsSimpleXml(IntPtr model, string fileName)
         {
             if (_sdaiSaveModelAsSimpleXmlBn == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -555,7 +555,7 @@ namespace IfcEngineCS
         /// <param name="model"></param>
         /// <param name="fileName"></param>
         [Obsolete("Will be removed in next version.")]
-        public static void SaveModelAsSimpleXml(IntPtr model, byte[] fileName)
+        public void SaveModelAsSimpleXml(IntPtr model, byte[] fileName)
         {
             if (_sdaiSaveModelAsSimpleXmlBn_byte == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -569,7 +569,7 @@ namespace IfcEngineCS
         /// </summary>
         /// <param name="model"></param>
         /// <param name="fileName"></param>
-        public static void SaveModelAsSimpleXmlUnicode(IntPtr model, string fileName)
+        public void SaveModelAsSimpleXmlUnicode(IntPtr model, string fileName)
         {
             if (_sdaiSaveModelAsSimpleXmlBn_unicode == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -583,7 +583,7 @@ namespace IfcEngineCS
         /// <param name="model"></param>
         /// <param name="fileName"></param>
         [Obsolete("Will be removed in next version.")]
-        public static void SaveModelAsSimpleXmlUnicode(IntPtr model, byte[] fileName)
+        public void SaveModelAsSimpleXmlUnicode(IntPtr model, byte[] fileName)
         {
             if (_sdaiSaveModelAsSimpleXmlBn_unicode == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -595,18 +595,18 @@ namespace IfcEngineCS
 
         #region Schema Reading
 
-        private static Delegates.sdaiGetEntity _sdaiGetEntity;
-        private static Delegates.sdaiGetEntity_byte _sdaiGetEntity_byte;
-        private static Delegates.engiGetEntityName _engiGetEntityName;
-        private static Delegates.engiGetEntityArgumentName _engiGetEntityArgumentName;
-        private static Delegates.engiGetEntityArgumentType _engiGetEntityArgumentType;
-        private static Delegates.engiGetEntityCount _engiGetEntityCount;
-        private static Delegates.engiGetEntityElement _engiGetEntityElement;
-        private static Delegates.sdaiGetEntityExtent _sdaiGetEntityExtent;
-        private static Delegates.sdaiGetEntityExtentBN _sdaiGetEntityExtentBn;
-        private static Delegates.sdaiGetEntityExtentBN_byte _sdaiGetEntityExtentBn_byte;
-        private static Delegates.engiGetEntityNoArguments _engiGetEntityNoArguments;
-        private static Delegates.engiGetEntityParent _engiGetEntityParent;
+        private Delegates.sdaiGetEntity _sdaiGetEntity;
+        private Delegates.sdaiGetEntity_byte _sdaiGetEntity_byte;
+        private Delegates.engiGetEntityName _engiGetEntityName;
+        private Delegates.engiGetEntityArgumentName _engiGetEntityArgumentName;
+        private Delegates.engiGetEntityArgumentType _engiGetEntityArgumentType;
+        private Delegates.engiGetEntityCount _engiGetEntityCount;
+        private Delegates.engiGetEntityElement _engiGetEntityElement;
+        private Delegates.sdaiGetEntityExtent _sdaiGetEntityExtent;
+        private Delegates.sdaiGetEntityExtentBN _sdaiGetEntityExtentBn;
+        private Delegates.sdaiGetEntityExtentBN_byte _sdaiGetEntityExtentBn_byte;
+        private Delegates.engiGetEntityNoArguments _engiGetEntityNoArguments;
+        private Delegates.engiGetEntityParent _engiGetEntityParent;
 
         /// <summary>
         /// This call retrieves a handle to an entity based on a given entity name.
@@ -614,7 +614,7 @@ namespace IfcEngineCS
         /// <param name="model"></param>
         /// <param name="entityName"></param>
         /// <returns></returns>
-        public static IntPtr GetEntity(IntPtr model, string entityName)
+        public IntPtr GetEntity(IntPtr model, string entityName)
         {
             if (_sdaiGetEntity == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -630,7 +630,7 @@ namespace IfcEngineCS
         /// <param name="entityName"></param>
         /// <returns></returns>
         [Obsolete("Will be removed in next version.")]
-        public static IntPtr GetEntity(IntPtr model, byte[] entityName)
+        public IntPtr GetEntity(IntPtr model, byte[] entityName)
         {
             if (_sdaiGetEntity_byte == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -646,7 +646,7 @@ namespace IfcEngineCS
         /// <param name="index"></param>
         /// <param name="valueType"></param>
         /// <param name="argumentName"></param>
-        public static void GetEntityArgumentName(IntPtr entity, IntPtr index, IntPtr valueType, out IntPtr argumentName)
+        public void GetEntityArgumentName(IntPtr entity, IntPtr index, IntPtr valueType, out IntPtr argumentName)
         {
             if (_engiGetEntityArgumentName == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -660,14 +660,14 @@ namespace IfcEngineCS
         /// <param name="entity"></param>
         /// <param name="index"></param>
         /// <param name="argumentType"></param>
-        public static void GetEntityArgumentType(IntPtr entity, IntPtr index, ref IntPtr argumentType)
+        public void GetEntityArgumentType(IntPtr entity, IntPtr index, ref IntPtr argumentType)
         {
             if (_engiGetEntityArgumentType == null) {
                 throw new Exception("Failed in loading IfcEngine.");
             }
             _engiGetEntityArgumentType.Invoke(entity, index, ref argumentType);
         }
-        public static IntPtr GetEntityCount(IntPtr model)
+        public IntPtr GetEntityCount(IntPtr model)
         {
             if (_engiGetEntityCount == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -681,7 +681,7 @@ namespace IfcEngineCS
         /// <param name="model"></param>
         /// <param name="index"></param>
         /// <returns></returns>
-        public static IntPtr GetEntityElement(IntPtr model, IntPtr index)
+        public IntPtr GetEntityElement(IntPtr model, IntPtr index)
         {
             if (_engiGetEntityElement == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -695,7 +695,7 @@ namespace IfcEngineCS
         /// <param name="model"></param>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public static IntPtr GetEntityExtent(IntPtr model, IntPtr entity)
+        public IntPtr GetEntityExtent(IntPtr model, IntPtr entity)
         {
             if (_sdaiGetEntityExtent == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -709,7 +709,7 @@ namespace IfcEngineCS
         /// <param name="model"></param>
         /// <param name="entityName"></param>
         /// <returns></returns>
-        public static IntPtr GetEntityExtent(IntPtr model, string entityName)
+        public IntPtr GetEntityExtent(IntPtr model, string entityName)
         {
             if (_sdaiGetEntityExtentBn == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -724,7 +724,7 @@ namespace IfcEngineCS
         /// <param name="entityName"></param>
         /// <returns></returns>
         [Obsolete("Will be removed in next version.")]
-        public static IntPtr GetEntityExtent(IntPtr model, byte[] entityName)
+        public IntPtr GetEntityExtent(IntPtr model, byte[] entityName)
         {
             if (_sdaiGetEntityExtentBn_byte == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -738,7 +738,7 @@ namespace IfcEngineCS
         /// <param name="entity"></param>
         /// <param name="valueType"></param>
         /// <param name="entityName"></param>
-        public static void GetEntityName(IntPtr entity, IntPtr valueType, out IntPtr entityName)
+        public void GetEntityName(IntPtr entity, IntPtr valueType, out IntPtr entityName)
         {
             if (_engiGetEntityName == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -751,7 +751,7 @@ namespace IfcEngineCS
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public static IntPtr GetEntityNoArguments(IntPtr entity)
+        public IntPtr GetEntityNoArguments(IntPtr entity)
         {
             if (_engiGetEntityNoArguments == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -764,7 +764,7 @@ namespace IfcEngineCS
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public static IntPtr GetEntityParent(IntPtr entity)
+        public IntPtr GetEntityParent(IntPtr entity)
         {
             if (_engiGetEntityParent == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -775,13 +775,13 @@ namespace IfcEngineCS
 
         #region Instance Header
 
-        private static Delegates.GetSPFFHeaderItem _getSpffHeaderItem;
-        private static Delegates.SetSPFFHeader _setSpffHeader;
-        private static Delegates.SetSPFFHeader_byte _setSpffHeader_byte;
-        private static Delegates.SetSPFFHeaderItem _setSpffHeaderItem;
-        private static Delegates.SetSPFFHeaderItem_byte _setSpffHeaderItem_byte;
+        private Delegates.GetSPFFHeaderItem _getSpffHeaderItem;
+        private Delegates.SetSPFFHeader _setSpffHeader;
+        private Delegates.SetSPFFHeader_byte _setSpffHeader_byte;
+        private Delegates.SetSPFFHeaderItem _setSpffHeaderItem;
+        private Delegates.SetSPFFHeaderItem_byte _setSpffHeaderItem_byte;
 
-        public static IntPtr GetSPFFHeaderItem(IntPtr model, IntPtr itemIndex, IntPtr itemSubIndex, IntPtr valueType, out IntPtr value)
+        public IntPtr GetSPFFHeaderItem(IntPtr model, IntPtr itemIndex, IntPtr itemSubIndex, IntPtr valueType, out IntPtr value)
         {
             if (_getSpffHeaderItem == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -803,7 +803,7 @@ namespace IfcEngineCS
         /// <param name="originatingSystem"></param>
         /// <param name="authorization"></param>
         /// <param name="fileSchema"></param>
-        public static void SetSPFFHeader(IntPtr model, string description, string implementationLevel, string name,
+        public void SetSPFFHeader(IntPtr model, string description, string implementationLevel, string name,
             string timeStamp, string author, string organization, string preprocessorVersion, string originatingSystem,
             string authorization, string fileSchema)
         {
@@ -830,7 +830,7 @@ namespace IfcEngineCS
         /// <param name="authorization"></param>
         /// <param name="fileSchema"></param>
         [Obsolete("Will be removed in next version.")]
-        public static void SetSPFFHeader(IntPtr model, byte[] description, byte[] implementationLevel, byte[] name,
+        public void SetSPFFHeader(IntPtr model, byte[] description, byte[] implementationLevel, byte[] name,
             byte[] timeStamp, byte[] author, byte[] organization, byte[] preprocessorVersion, byte[] originatingSystem,
             byte[] authorization, byte[] fileSchema)
         {
@@ -842,7 +842,7 @@ namespace IfcEngineCS
                 authorization, fileSchema);
         }
 
-        public static IntPtr SetSPFFHeaderItem(IntPtr model, IntPtr itemIndex, IntPtr itemSubIndex, IntPtr valueType, string value)
+        public IntPtr SetSPFFHeaderItem(IntPtr model, IntPtr itemIndex, IntPtr itemSubIndex, IntPtr valueType, string value)
         {
             if (_setSpffHeaderItem == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -851,7 +851,7 @@ namespace IfcEngineCS
         }
 
         [Obsolete("Will be removed in next version.")]
-        public static IntPtr SetSPFFHeaderItem(IntPtr model, IntPtr itemIndex, IntPtr itemSubIndex, IntPtr valueType, byte[] value)
+        public IntPtr SetSPFFHeaderItem(IntPtr model, IntPtr itemIndex, IntPtr itemSubIndex, IntPtr valueType, byte[] value)
         {
             if (_setSpffHeaderItem_byte == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -862,31 +862,31 @@ namespace IfcEngineCS
 
         #region Instance Reading
 
-        private static Delegates.sdaiGetADBType _sdaiGetAdbType;
-        private static Delegates.sdaiGetADBTypePath _sdaiGetAdbTypePath;
-        private static Delegates.sdaiGetADBValue _sdaiGetAdbValue;
-        private static Delegates.sdaiGetADBValue_d _sdaiGetAdbValue_d;
-        private static Delegates.engiGetAggrElement _engiGetAggrElement;
-        private static Delegates.engiGetAggrElement_d _engiGetAggrElement_d;
-        private static Delegates.engiGetAggrType _engiGetAggrType;
-        private static Delegates.sdaiGetAttr _sdaiGetAttr;
-        private static Delegates.sdaiGetAttrBN _sdaiGetAttrBn;
-        private static Delegates.sdaiGetAttrBN_byte _sdaiGetAttrBn_byte;
-        private static Delegates.sdaiGetAttr_d _sdaiGetAttr_d;
-        private static Delegates.sdaiGetAttrBN_d _sdaiGetAttrBn_d;
-        private static Delegates.sdaiGetAttrBN_byte_d _sdaiGetAttrBn_byte_d;
-        private static Delegates.sdaiGetAttrDefinition _sdaiGetAttrDefinition;
-        private static Delegates.sdaiGetAttrDefinition_byte _sdaiGetAttrDefinition_byte;
-        private static Delegates.sdaiGetInstanceType _sdaiGetInstanceType;
-        private static Delegates.sdaiGetMemberCount _sdaiGetMemberCount;
-        private static Delegates.sdaiIsKindOf _sdaiIsKindOf;
+        private Delegates.sdaiGetADBType _sdaiGetAdbType;
+        private Delegates.sdaiGetADBTypePath _sdaiGetAdbTypePath;
+        private Delegates.sdaiGetADBValue _sdaiGetAdbValue;
+        private Delegates.sdaiGetADBValue_d _sdaiGetAdbValue_d;
+        private Delegates.engiGetAggrElement _engiGetAggrElement;
+        private Delegates.engiGetAggrElement_d _engiGetAggrElement_d;
+        private Delegates.engiGetAggrType _engiGetAggrType;
+        private Delegates.sdaiGetAttr _sdaiGetAttr;
+        private Delegates.sdaiGetAttrBN _sdaiGetAttrBn;
+        private Delegates.sdaiGetAttrBN_byte _sdaiGetAttrBn_byte;
+        private Delegates.sdaiGetAttr_d _sdaiGetAttr_d;
+        private Delegates.sdaiGetAttrBN_d _sdaiGetAttrBn_d;
+        private Delegates.sdaiGetAttrBN_byte_d _sdaiGetAttrBn_byte_d;
+        private Delegates.sdaiGetAttrDefinition _sdaiGetAttrDefinition;
+        private Delegates.sdaiGetAttrDefinition_byte _sdaiGetAttrDefinition_byte;
+        private Delegates.sdaiGetInstanceType _sdaiGetInstanceType;
+        private Delegates.sdaiGetMemberCount _sdaiGetMemberCount;
+        private Delegates.sdaiIsKindOf _sdaiIsKindOf;
 
         /// <summary>
         /// Handle to ADB type, a typical representation is IFCLABEL('myLabel') or IFCINTEGER(313).
         /// </summary>
         /// <param name="ADB"></param>
         /// <returns></returns>
-        public static IntPtr GetADBType(IntPtr ADB)
+        public IntPtr GetADBType(IntPtr ADB)
         {
             if (_sdaiGetAdbType == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -900,7 +900,7 @@ namespace IfcEngineCS
         /// <param name="ADB">Handle to ADB type, a typical representation is IFCLABEL('myLabel') or IFCINTEGER(313).</param>
         /// <param name="typeNameNumber">Enables the user to define the output, typical use is sdaiSTRING, sdaiUNICODE or sdaiEXPRESSSTRING.</param>
         /// <param name="path"></param>
-        public static void GetADBTypePath(IntPtr ADB, IntPtr typeNameNumber, out IntPtr path)
+        public void GetADBTypePath(IntPtr ADB, IntPtr typeNameNumber, out IntPtr path)
         {
             if (_sdaiGetAdbTypePath == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -914,7 +914,7 @@ namespace IfcEngineCS
         /// <param name="ADB">Handle to ADB type, a typical representation is IFCLABEL('myLabel') or IFCINTEGER(313).</param>
         /// <param name="valueType">Type of the value, for example sdaiSTRING, sdaiINSTANCE, sdaiREAL, ...</param>
         /// <param name="value">Placeholder for the information, formatting depending on defined valueType.</param>
-        public static void GetADBValue(IntPtr ADB, IntPtr valueType, out IntPtr value)
+        public void GetADBValue(IntPtr ADB, IntPtr valueType, out IntPtr value)
         {
             if (_sdaiGetAdbValue == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -928,7 +928,7 @@ namespace IfcEngineCS
         /// <param name="ADB">Handle to ADB type, a typical representation is IFCLABEL('myLabel') or IFCINTEGER(313).</param>
         /// <param name="valueType">Type of the value, for example sdaiSTRING, sdaiINSTANCE, sdaiREAL, ...</param>
         /// <param name="value">Placeholder for the information, formatting depending on defined valueType.</param>
-        public static void GetADBValue(IntPtr ADB, IntPtr valueType, out double value)
+        public void GetADBValue(IntPtr ADB, IntPtr valueType, out double value)
         {
             if (_sdaiGetAdbValue_d == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -944,7 +944,7 @@ namespace IfcEngineCS
         /// <param name="valueType">Type of the value, for example sdaiSTRING, sdaiINSTANCE, sdaiREAL, ...</param>
         /// <param name="value">Placeholder for the information, formatting depending on defined valueType.</param>
         /// <returns></returns>
-        public static IntPtr GetAggrElement(IntPtr aggregate, IntPtr elementIndex, IntPtr valueType,
+        public IntPtr GetAggregationElement(IntPtr aggregate, IntPtr elementIndex, IntPtr valueType,
             out IntPtr value)
         {
             if (_engiGetAggrElement == null) {
@@ -961,7 +961,7 @@ namespace IfcEngineCS
         /// <param name="valueType">Type of the value, for example sdaiSTRING, sdaiINSTANCE, sdaiREAL, ...</param>
         /// <param name="value">Placeholder for the information, formatting depending on defined valueType.</param>
         /// <returns></returns>
-        public static IntPtr GetAggrElement(IntPtr aggregate, IntPtr elementIndex, IntPtr valueType,
+        public IntPtr GetAggregationElement(IntPtr aggregate, IntPtr elementIndex, IntPtr valueType,
             out double value)
         {
             if (_engiGetAggrElement_d == null) {
@@ -975,7 +975,7 @@ namespace IfcEngineCS
         /// </summary>
         /// <param name="aggregate">Handle of an aggregation (i.e. sorted collection).</param>
         /// <param name="aggragateType">Type of the aggregation, for example sdaiINSTANCE, sdaiREAL, ...</param>
-        public static void GetAggrType(IntPtr aggregate, ref IntPtr aggragateType)
+        public void GetAggregationType(IntPtr aggregate, ref IntPtr aggragateType)
         {
             if (_engiGetAggrType == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -991,7 +991,7 @@ namespace IfcEngineCS
         /// <param name="valueType">Type of the value, for example sdaiSTRING, sdaiINSTANCE, sdaiREAL, ...</param>
         /// <param name="value">Placeholder for the information, formatting depending on defined valueType.</param>
         /// <returns></returns>
-        public static IntPtr GetAttr(IntPtr instance, IntPtr attribute, IntPtr valueType, out IntPtr value)
+        public IntPtr GetAttribute(IntPtr instance, IntPtr attribute, IntPtr valueType, out IntPtr value)
         {
             if (_sdaiGetAttr == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1007,7 +1007,7 @@ namespace IfcEngineCS
         /// <param name="valueType">Type of the value, for example sdaiSTRING, sdaiINSTANCE, sdaiREAL, ...</param>
         /// <param name="value">Placeholder for the information, formatting depending on defined valueType.</param>
         /// <returns></returns>
-        public static IntPtr GetAttr(IntPtr instance, IntPtr attribute, IntPtr valueType, out double value)
+        public IntPtr GetAttribute(IntPtr instance, IntPtr attribute, IntPtr valueType, out double value)
         {
             if (_sdaiGetAttr_d == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1023,7 +1023,7 @@ namespace IfcEngineCS
         /// <param name="valueType">Type of the value, for example sdaiSTRING, sdaiINSTANCE, sdaiREAL, ...</param>
         /// <param name="value">Placeholder for the information, formatting depending on defined valueType.</param>
         /// <returns></returns>
-        public static IntPtr GetAttr(IntPtr instance, string attributeName, IntPtr valueType, out IntPtr value)
+        public IntPtr GetAttribute(IntPtr instance, string attributeName, IntPtr valueType, out IntPtr value)
         {
             if (_sdaiGetAttrBn == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1039,7 +1039,7 @@ namespace IfcEngineCS
         /// <param name="valueType">Type of the value, for example sdaiSTRING, sdaiINSTANCE, sdaiREAL, ...</param>
         /// <param name="value">Placeholder for the information, formatting depending on defined valueType.</param>
         /// <returns></returns>
-        public static IntPtr GetAttr(IntPtr instance, string attributeName, IntPtr valueType, out double value)
+        public IntPtr GetAttribute(IntPtr instance, string attributeName, IntPtr valueType, out double value)
         {
             if (_sdaiGetAttrBn_d == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1056,7 +1056,7 @@ namespace IfcEngineCS
         /// <param name="value">Placeholder for the information, formatting depending on defined valueType.</param>
         /// <returns></returns>
         [Obsolete("Will be removed in next version.")]
-        public static IntPtr GetAttr(IntPtr instance, byte[] attributeName, IntPtr valueType,
+        public IntPtr GetAttribute(IntPtr instance, byte[] attributeName, IntPtr valueType,
             out IntPtr value)
         {
             if (_sdaiGetAttrBn_byte == null) {
@@ -1074,7 +1074,7 @@ namespace IfcEngineCS
         /// <param name="value">Placeholder for the information, formatting depending on defined valueType.</param>
         /// <returns></returns>
         [Obsolete("Will be removed in next version.")]
-        public static IntPtr GetAttr(IntPtr instance, byte[] attributeName, IntPtr valueType,
+        public IntPtr GetAttribute(IntPtr instance, byte[] attributeName, IntPtr valueType,
             out double value)
         {
             if (_sdaiGetAttrBn_byte_d == null) {
@@ -1089,7 +1089,7 @@ namespace IfcEngineCS
         /// <param name="entity">Handle of an entity (schema item/class), for example IFCWALLSTANDARDCASE as defined in IFC4.exp.</param>
         /// <param name="attributeName">Name of the attribute, for example Name of IFCROOT as defined in IFC4.exp.</param>
         /// <returns></returns>
-        public static IntPtr GetAttrDefinition(IntPtr entity, string attributeName)
+        public IntPtr GetAttributeDefinition(IntPtr entity, string attributeName)
         {
             if (_sdaiGetAttrDefinition == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1104,7 +1104,7 @@ namespace IfcEngineCS
         /// <param name="attributeName">Name of the attribute, for example Name of IFCROOT as defined in IFC4.exp.</param>
         /// <returns></returns>
         [Obsolete("Will be removed in next version.")]
-        public static IntPtr GetAttrDefinition(IntPtr entity, byte[] attributeName)
+        public IntPtr GetAttributeDefinition(IntPtr entity, byte[] attributeName)
         {
             if (_sdaiGetAttrDefinition_byte == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1117,7 +1117,7 @@ namespace IfcEngineCS
         /// </summary>
         /// <param name="instance">Handle of an instance within an IFC file, for example #31313 = IFCWALLSTANDARDCASE(...)</param>
         /// <returns></returns>
-        public static IntPtr GetInstanceType(IntPtr instance)
+        public IntPtr GetInstanceType(IntPtr instance)
         {
             if (_sdaiGetInstanceType == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1130,7 +1130,7 @@ namespace IfcEngineCS
         /// </summary>
         /// <param name="aggregate">Handle of an aggregation (i.e. sorted collection).</param>
         /// <returns></returns>
-        public static IntPtr GetMemberCount(IntPtr aggregate)
+        public IntPtr GetMemberCount(IntPtr aggregate)
         {
             if (_sdaiGetMemberCount == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1144,7 +1144,7 @@ namespace IfcEngineCS
         /// <param name="instance">Handle of an instance within an IFC file, for example #31313 = IFCWALLSTANDARDCASE(...)</param>
         /// <param name="entity">Handle of an entity (schema item/class), for example IFCWALLSTANDARDCASE as defined in IFC4.exp.</param>
         /// <returns></returns>
-        public static IntPtr IsKindOf(IntPtr instance, IntPtr entity)
+        public IntPtr IsKindOf(IntPtr instance, IntPtr entity)
         {
             if (_sdaiIsKindOf == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1155,37 +1155,37 @@ namespace IfcEngineCS
 
         #region Instance Wrting
 
-        private static Delegates.sdaiAppend _sdaiAppend;
-        private static Delegates.sdaiAppend_d _sdaiAppend_d;
-        private static Delegates.sdaiAppend_s _sdaiAppend_s;
-        private static Delegates.sdaiAppend_b _sdaiAppend_b;
-        private static Delegates.sdaiCreateADB _sdaiCreateAdb;
-        private static Delegates.sdaiCreateADB_d _sdaiCreateAdb_d;
-        private static Delegates.sdaiCreateADB_s _sdaiCreateAdb_s;
-        private static Delegates.sdaiCreateADB_b _sdaiCreateAdb_b;
-        private static Delegates.sdaiCreateAggr _sdaiCreateAggr;
-        private static Delegates.sdaiCreateAggrBN _sdaiCreateAggrBn;
-        private static Delegates.sdaiCreateAggrBN_byte _sdaiCreateAggrBn_byte;
-        private static Delegates.sdaiCreateInstance _sdaiCreateInstance;
-        private static Delegates.sdaiCreateInstanceBN _sdaiCreateInstanceBn;
-        private static Delegates.sdaiCreateInstanceBN_byte _sdaiCreateInstanceBn_byte;
-        private static Delegates.sdaiDeleteInstance _sdaiDeleteInstance;
-        private static Delegates.sdaiPutADBTypePath _sdaiPutAdbTypePath;
-        private static Delegates.sdaiPutADBTypePath_byte _sdaiPutAdbTypePath_byte;
-        private static Delegates.sdaiPutAttr _sdaiPutAttr;
-        private static Delegates.sdaiPutAttr_d _sdaiPutAttr_d;
-        private static Delegates.sdaiPutAttr_s _sdaiPutAttr_s;
-        private static Delegates.sdaiPutAttr_b _sdaiPutAttr_b;
-        private static Delegates.sdaiPutAttrBN _sdaiPutAttrBN;
-        private static Delegates.sdaiPutAttrBN_d _sdaiPutAttrBN_d;
-        private static Delegates.sdaiPutAttrBN_s _sdaiPutAttrBN_s;
-        private static Delegates.sdaiPutAttrBN_b _sdaiPutAttrBN_b;
-        private static Delegates.sdaiPutAttrBN_byte _sdaiPutAttrBN_byte;
-        private static Delegates.sdaiPutAttrBN_byte_d _sdaiPutAttrBN_byte_d;
-        private static Delegates.sdaiPutAttrBN_byte_s _sdaiPutAttrBN_byte_s;
-        private static Delegates.sdaiPutAttrBN_byte_b _sdaiPutAttrBN_byte_b;
-        private static Delegates.engiSetComment _engiSetComment;
-        private static Delegates.engiSetComment_byte _engiSetComment_byte;
+        private Delegates.sdaiAppend _sdaiAppend;
+        private Delegates.sdaiAppend_d _sdaiAppend_d;
+        private Delegates.sdaiAppend_s _sdaiAppend_s;
+        private Delegates.sdaiAppend_b _sdaiAppend_b;
+        private Delegates.sdaiCreateADB _sdaiCreateAdb;
+        private Delegates.sdaiCreateADB_d _sdaiCreateAdb_d;
+        private Delegates.sdaiCreateADB_s _sdaiCreateAdb_s;
+        private Delegates.sdaiCreateADB_b _sdaiCreateAdb_b;
+        private Delegates.sdaiCreateAggr _sdaiCreateAggr;
+        private Delegates.sdaiCreateAggrBN _sdaiCreateAggrBn;
+        private Delegates.sdaiCreateAggrBN_byte _sdaiCreateAggrBn_byte;
+        private Delegates.sdaiCreateInstance _sdaiCreateInstance;
+        private Delegates.sdaiCreateInstanceBN _sdaiCreateInstanceBn;
+        private Delegates.sdaiCreateInstanceBN_byte _sdaiCreateInstanceBn_byte;
+        private Delegates.sdaiDeleteInstance _sdaiDeleteInstance;
+        private Delegates.sdaiPutADBTypePath _sdaiPutAdbTypePath;
+        private Delegates.sdaiPutADBTypePath_byte _sdaiPutAdbTypePath_byte;
+        private Delegates.sdaiPutAttr _sdaiPutAttr;
+        private Delegates.sdaiPutAttr_d _sdaiPutAttr_d;
+        private Delegates.sdaiPutAttr_s _sdaiPutAttr_s;
+        private Delegates.sdaiPutAttr_b _sdaiPutAttr_b;
+        private Delegates.sdaiPutAttrBN _sdaiPutAttrBN;
+        private Delegates.sdaiPutAttrBN_d _sdaiPutAttrBN_d;
+        private Delegates.sdaiPutAttrBN_s _sdaiPutAttrBN_s;
+        private Delegates.sdaiPutAttrBN_b _sdaiPutAttrBN_b;
+        private Delegates.sdaiPutAttrBN_byte _sdaiPutAttrBN_byte;
+        private Delegates.sdaiPutAttrBN_byte_d _sdaiPutAttrBN_byte_d;
+        private Delegates.sdaiPutAttrBN_byte_s _sdaiPutAttrBN_byte_s;
+        private Delegates.sdaiPutAttrBN_byte_b _sdaiPutAttrBN_byte_b;
+        private Delegates.engiSetComment _engiSetComment;
+        private Delegates.engiSetComment_byte _engiSetComment_byte;
 
         /// <summary>
         /// 
@@ -1193,7 +1193,7 @@ namespace IfcEngineCS
         /// <param name="list">A handle to the list that is extended with this call.</param>
         /// <param name="valueType">Type of the value, for example sdaiSTRING, sdaiINSTANCE, sdaiREAL, ...</param>
         /// <param name="value">Placeholder for the information, formatting depending on defined valueType.</param>
-        public static void Append(IntPtr list, IntPtr valueType, ref IntPtr value)
+        public void Append(IntPtr list, IntPtr valueType, ref IntPtr value)
         {
             if (_sdaiAppend == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1207,7 +1207,7 @@ namespace IfcEngineCS
         /// <param name="list">A handle to the list that is extended with this call.</param>
         /// <param name="valueType">Type of the value, for example sdaiSTRING, sdaiINSTANCE, sdaiREAL, ...</param>
         /// <param name="value">Placeholder for the information, formatting depending on defined valueType.</param>
-        public static void Append(IntPtr list, IntPtr valueType, ref double value)
+        public void Append(IntPtr list, IntPtr valueType, ref double value)
         {
             if (_sdaiAppend_d == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1221,7 +1221,7 @@ namespace IfcEngineCS
         /// <param name="list">A handle to the list that is extended with this call.</param>
         /// <param name="valueType">Type of the value, for example sdaiSTRING, sdaiINSTANCE, sdaiREAL, ...</param>
         /// <param name="value">Placeholder for the information, formatting depending on defined valueType.</param>
-        public static void Append(IntPtr list, IntPtr valueType, string value)
+        public void Append(IntPtr list, IntPtr valueType, string value)
         {
             if (_sdaiAppend_s == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1236,7 +1236,7 @@ namespace IfcEngineCS
         /// <param name="valueType">Type of the value, for example sdaiSTRING, sdaiINSTANCE, sdaiREAL, ...</param>
         /// <param name="value">Placeholder for the information, formatting depending on defined valueType.</param>
         [Obsolete("Will be removed in next version.")]
-        public static void Append(IntPtr list, IntPtr valueType, byte[] value)
+        public void Append(IntPtr list, IntPtr valueType, byte[] value)
         {
             if (_sdaiAppend_b == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1250,7 +1250,7 @@ namespace IfcEngineCS
         /// <param name="valueType">Type of the value, for example sdaiSTRING, sdaiINSTANCE, sdaiREAL, ...</param>
         /// <param name="value"></param>
         /// <returns>Placeholder for the information, formatting depending on defined valueType.</returns>
-        public static IntPtr CreateADB(IntPtr valueType, ref IntPtr value)
+        public IntPtr CreateADB(IntPtr valueType, ref IntPtr value)
         {
             if (_sdaiCreateAdb == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1264,7 +1264,7 @@ namespace IfcEngineCS
         /// <param name="valueType">Type of the value, for example sdaiSTRING, sdaiINSTANCE, sdaiREAL, ...</param>
         /// <param name="value"></param>
         /// <returns>Placeholder for the information, formatting depending on defined valueType.</returns>
-        public static IntPtr CreateADB(IntPtr valueType, ref double value)
+        public IntPtr CreateADB(IntPtr valueType, ref double value)
         {
             if (_sdaiCreateAdb_d == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1278,7 +1278,7 @@ namespace IfcEngineCS
         /// <param name="valueType">Type of the value, for example sdaiSTRING, sdaiINSTANCE, sdaiREAL, ...</param>
         /// <param name="value"></param>
         /// <returns>Placeholder for the information, formatting depending on defined valueType.</returns>
-        public static IntPtr CreateADB(IntPtr valueType, string value)
+        public IntPtr CreateADB(IntPtr valueType, string value)
         {
             if (_sdaiCreateAdb_s == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1293,7 +1293,7 @@ namespace IfcEngineCS
         /// <param name="value"></param>
         /// <returns>Placeholder for the information, formatting depending on defined valueType.</returns>
         [Obsolete("Will be removed in next version.")]
-        public static IntPtr CreateADB(IntPtr valueType, byte[] value)
+        public IntPtr CreateADB(IntPtr valueType, byte[] value)
         {
             if (_sdaiCreateAdb_b == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1307,7 +1307,7 @@ namespace IfcEngineCS
         /// <param name="instance">Handle of an instance within an IFC file, for example #31313 = IFCWALLSTANDARDCASE(...)</param>
         /// <param name="attribute">A handle to the an attribute of a certain entity, for example attribute Name of entity IFCROOT.</param>
         /// <returns></returns>
-        public static IntPtr CreateAggr(IntPtr instance, IntPtr attribute)
+        public IntPtr CreateAggregation(IntPtr instance, IntPtr attribute)
         {
             if (_sdaiCreateAggr == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1321,7 +1321,7 @@ namespace IfcEngineCS
         /// <param name="instance">Handle of an instance within an IFC file, for example #31313 = IFCWALLSTANDARDCASE(...)</param>
         /// <param name="attributeName">Name of the attribute, for example Name of IFCROOT as defined in IFC4.exp.</param>
         /// <returns></returns>
-        public static IntPtr CreateAggr(IntPtr instance, string attributeName)
+        public IntPtr CreateAggregation(IntPtr instance, string attributeName)
         {
             if (_sdaiCreateAggrBn == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1336,7 +1336,7 @@ namespace IfcEngineCS
         /// <param name="attributeName">Name of the attribute, for example Name of IFCROOT as defined in IFC4.exp.</param>
         /// <returns></returns>
         [Obsolete("Will be removed in next version.")]
-        public static IntPtr CreateAggr(IntPtr instance, byte[] attributeName)
+        public IntPtr CreateAggregation(IntPtr instance, byte[] attributeName)
         {
             if (_sdaiCreateAggrBn_byte == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1350,7 +1350,7 @@ namespace IfcEngineCS
         /// <param name="model">Handle of the model containing the IFC file, this handle is needed in many other calls and given when the model is created.</param>
         /// <param name="entity">Handle of an entity (schema item/class), for example IFCWALLSTANDARDCASE as defined in IFC4.exp.</param>
         /// <returns></returns>
-        public static IntPtr CreateInstance(IntPtr model, IntPtr entity)
+        public IntPtr CreateInstance(IntPtr model, IntPtr entity)
         {
             if (_sdaiCreateInstance == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1364,7 +1364,7 @@ namespace IfcEngineCS
         /// <param name="model">Handle of the model containing the IFC file, this handle is needed in many other calls and given when the model is created.</param>
         /// <param name="entityName">Name of the entity (schema item/class), for example IFCWALLSTANDARDCASE as defined in IFC4.exp.</param>
         /// <returns></returns>
-        public static IntPtr CreateInstance(IntPtr model, string entityName)
+        public IntPtr CreateInstance(IntPtr model, string entityName)
         {
             if (_sdaiCreateInstanceBn == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1379,7 +1379,7 @@ namespace IfcEngineCS
         /// <param name="entityName">Name of the entity (schema item/class), for example IFCWALLSTANDARDCASE as defined in IFC4.exp.</param>
         /// <returns></returns>
         [Obsolete("Will be removed in next version.")]
-        public static IntPtr CreateInstance(IntPtr model, byte[] entityName)
+        public IntPtr CreateInstance(IntPtr model, byte[] entityName)
         {
             if (_sdaiCreateInstanceBn_byte == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1391,7 +1391,7 @@ namespace IfcEngineCS
         /// 
         /// </summary>
         /// <param name="instance">Handle of an instance within an IFC file, for example #31313 = IFCWALLSTANDARDCASE(...)</param>
-        public static void iDeleteInstance(IntPtr instance)
+        public void DeleteInstance(IntPtr instance)
         {
             if (_sdaiDeleteInstance == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1405,7 +1405,7 @@ namespace IfcEngineCS
         /// <param name="ADB">Handle to ADB type, a typical representation is IFCLABEL('myLabel') or IFCINTEGER(313).</param>
         /// <param name="pathCount">The number of path's for this ADB type, in case of IFC4 and all earlier versions this should always be 1.</param>
         /// <param name="path">The path of the ADB type, in case of example IFCLABEL('myLabel') the path is "IFCLABEL".</param>
-        public static void PutADBTypePath(IntPtr ADB, IntPtr pathCount, string path)
+        public void PutADBTypePath(IntPtr ADB, IntPtr pathCount, string path)
         {
             if (_sdaiPutAdbTypePath == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1420,7 +1420,7 @@ namespace IfcEngineCS
         /// <param name="pathCount">The number of path's for this ADB type, in case of IFC4 and all earlier versions this should always be 1.</param>
         /// <param name="path">The path of the ADB type, in case of example IFCLABEL('myLabel') the path is "IFCLABEL".</param>
         [Obsolete("Will be removed in next version.")]
-        public static void PutADBTypePath(IntPtr ADB, IntPtr pathCount, byte[] path)
+        public void PutADBTypePath(IntPtr ADB, IntPtr pathCount, byte[] path)
         {
             if (_sdaiPutAdbTypePath_byte == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1435,7 +1435,7 @@ namespace IfcEngineCS
         /// <param name="attribute">A handle to the an attribute of a certain entity, for example attribute Name of entity IFCROOT.</param>
         /// <param name="valueType">Type of the value, for example sdaiSTRING, sdaiINSTANCE, sdaiREAL, ...</param>
         /// <param name="value">Placeholder for the information, formatting depending on defined valueType.</param>
-        public static void PutAttr(IntPtr instance, IntPtr attribute, IntPtr valueType, ref IntPtr value)
+        public void PutAttribute(IntPtr instance, IntPtr attribute, IntPtr valueType, ref IntPtr value)
         {
             if (_sdaiPutAttr == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1450,7 +1450,7 @@ namespace IfcEngineCS
         /// <param name="attribute">A handle to the an attribute of a certain entity, for example attribute Name of entity IFCROOT.</param>
         /// <param name="valueType">Type of the value, for example sdaiSTRING, sdaiINSTANCE, sdaiREAL, ...</param>
         /// <param name="value">Placeholder for the information, formatting depending on defined valueType.</param>
-        public static void PutAttr(IntPtr instance, IntPtr attribute, IntPtr valueType, ref double value)
+        public void PutAttribute(IntPtr instance, IntPtr attribute, IntPtr valueType, ref double value)
         {
             if (_sdaiPutAttr_d == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1465,7 +1465,7 @@ namespace IfcEngineCS
         /// <param name="attribute">A handle to the an attribute of a certain entity, for example attribute Name of entity IFCROOT.</param>
         /// <param name="valueType">Type of the value, for example sdaiSTRING, sdaiINSTANCE, sdaiREAL, ...</param>
         /// <param name="value">Placeholder for the information, formatting depending on defined valueType.</param>
-        public static void PutAttr(IntPtr instance, IntPtr attribute, IntPtr valueType, string value)
+        public void PutAttribute(IntPtr instance, IntPtr attribute, IntPtr valueType, string value)
         {
             if (_sdaiPutAttr_s == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1481,7 +1481,7 @@ namespace IfcEngineCS
         /// <param name="valueType">Type of the value, for example sdaiSTRING, sdaiINSTANCE, sdaiREAL, ...</param>
         /// <param name="value">Placeholder for the information, formatting depending on defined valueType.</param>
         [Obsolete("Will be removed in next version.")]
-        public static void PutAttr(IntPtr instance, IntPtr attribute, IntPtr valueType, byte[] value)
+        public void PutAttribute(IntPtr instance, IntPtr attribute, IntPtr valueType, byte[] value)
         {
             if (_sdaiPutAttr_b == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1496,7 +1496,7 @@ namespace IfcEngineCS
         /// <param name="attributeName">Name of the attribute, for example Name of IFCROOT as defined in IFC4.exp.</param>
         /// <param name="valueType">Type of the value, for example sdaiSTRING, sdaiINSTANCE, sdaiREAL, ...</param>
         /// <param name="value">Placeholder for the information, formatting depending on defined valueType.</param>
-        public static void PutAttr(IntPtr instance, string attributeName, IntPtr valueType, ref IntPtr value)
+        public void PutAttribute(IntPtr instance, string attributeName, IntPtr valueType, ref IntPtr value)
         {
             if (_sdaiPutAttrBN == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1511,7 +1511,7 @@ namespace IfcEngineCS
         /// <param name="attributeName">Name of the attribute, for example Name of IFCROOT as defined in IFC4.exp.</param>
         /// <param name="valueType">Type of the value, for example sdaiSTRING, sdaiINSTANCE, sdaiREAL, ...</param>
         /// <param name="value">Placeholder for the information, formatting depending on defined valueType.</param>
-        public static void PutAttr(IntPtr instance, string attributeName, IntPtr valueType, ref double value)
+        public void PutAttribute(IntPtr instance, string attributeName, IntPtr valueType, ref double value)
         {
             if (_sdaiPutAttrBN_d == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1526,7 +1526,7 @@ namespace IfcEngineCS
         /// <param name="attributeName">Name of the attribute, for example Name of IFCROOT as defined in IFC4.exp.</param>
         /// <param name="valueType">Type of the value, for example sdaiSTRING, sdaiINSTANCE, sdaiREAL, ...</param>
         /// <param name="value">Placeholder for the information, formatting depending on defined valueType.</param>
-        public static void PutAttr(IntPtr instance, string attributeName, IntPtr valueType, string value)
+        public void PutAttribute(IntPtr instance, string attributeName, IntPtr valueType, string value)
         {
             if (_sdaiPutAttrBN_s == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1542,7 +1542,7 @@ namespace IfcEngineCS
         /// <param name="valueType">Type of the value, for example sdaiSTRING, sdaiINSTANCE, sdaiREAL, ...</param>
         /// <param name="value">Placeholder for the information, formatting depending on defined valueType.</param>
         [Obsolete("Will be removed in next version.")]
-        public static void PutAttr(IntPtr instance, string attributeName, IntPtr valueType, byte[] value)
+        public void PutAttribute(IntPtr instance, string attributeName, IntPtr valueType, byte[] value)
         {
 
             if (_sdaiPutAttrBN_b == null) {
@@ -1559,7 +1559,7 @@ namespace IfcEngineCS
         /// <param name="valueType">Type of the value, for example sdaiSTRING, sdaiINSTANCE, sdaiREAL, ...</param>
         /// <param name="value">Placeholder for the information, formatting depending on defined valueType.</param>
         [Obsolete("Will be removed in next version.")]
-        public static void PutAttr(IntPtr instance, byte[] attributeName, IntPtr valueType, ref IntPtr value)
+        public void PutAttribute(IntPtr instance, byte[] attributeName, IntPtr valueType, ref IntPtr value)
         {
 
             if (_sdaiPutAttrBN_byte == null) {
@@ -1576,7 +1576,7 @@ namespace IfcEngineCS
         /// <param name="valueType">Type of the value, for example sdaiSTRING, sdaiINSTANCE, sdaiREAL, ...</param>
         /// <param name="value">Placeholder for the information, formatting depending on defined valueType.</param>
         [Obsolete("Will be removed in next version.")]
-        public static void PutAttr(IntPtr instance, byte[] attributeName, IntPtr valueType,
+        public void PutAttribute(IntPtr instance, byte[] attributeName, IntPtr valueType,
             ref double value)
         {
 
@@ -1594,7 +1594,7 @@ namespace IfcEngineCS
         /// <param name="valueType">Type of the value, for example sdaiSTRING, sdaiINSTANCE, sdaiREAL, ...</param>
         /// <param name="value">Placeholder for the information, formatting depending on defined valueType.</param>
         [Obsolete("Will be removed in next version.")]
-        public static void PutAttr(IntPtr instance, byte[] attributeName, IntPtr valueType, string value)
+        public void PutAttribute(IntPtr instance, byte[] attributeName, IntPtr valueType, string value)
         {
             if (_sdaiPutAttrBN_byte_s == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1609,7 +1609,7 @@ namespace IfcEngineCS
         /// <param name="valueType">Type of the value, for example sdaiSTRING, sdaiINSTANCE, sdaiREAL, ...</param>
         /// <param name="value">Placeholder for the information, formatting depending on defined valueType.</param>
         [Obsolete("Will be removed in next version.")]
-        public static void PutAttr(IntPtr instance, byte[] attributeName, IntPtr valueType, byte[] value)
+        public void PutAttribute(IntPtr instance, byte[] attributeName, IntPtr valueType, byte[] value)
         {
             if (_sdaiPutAttrBN_byte_b == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1622,7 +1622,7 @@ namespace IfcEngineCS
         /// </summary>
         /// <param name="instance">Handle of an instance within an IFC file, for example #31313 = IFCWALLSTANDARDCASE(...)</param>
         /// <param name="comment">A string value that will be included in the exported IFC file as comment to the instance.</param>
-        public static void SetComment(IntPtr instance, string comment)
+        public void SetComment(IntPtr instance, string comment)
         {
             if (_engiSetComment == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1636,7 +1636,7 @@ namespace IfcEngineCS
         /// <param name="instance">Handle of an instance within an IFC file, for example #31313 = IFCWALLSTANDARDCASE(...)</param>
         /// <param name="comment">A string value that will be included in the exported IFC file as comment to the instance.</param>
         [Obsolete("Will be removed in next version.")]
-        public static void engiSetComment(IntPtr instance, byte[] comment)
+        public void SetComment(IntPtr instance, byte[] comment)
         {
             if (_engiSetComment_byte == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1647,13 +1647,13 @@ namespace IfcEngineCS
 
         #region Controling Calls
 
-        private static Delegates.circleSegments _circleSegments;
-        private static Delegates.cleanMemory _cleanMemory;
-        private static Delegates.internalGetP21Line _internalGetP21Line;
-        private static Delegates.internalGetInstanceFromP21Line _internalGetInstanceFromP21Line;
-        private static Delegates.setStringUnicode _setStringUnicode;
+        private Delegates.circleSegments _circleSegments;
+        private Delegates.cleanMemory _cleanMemory;
+        private Delegates.internalGetP21Line _internalGetP21Line;
+        private Delegates.internalGetInstanceFromP21Line _internalGetInstanceFromP21Line;
+        private Delegates.setStringUnicode _setStringUnicode;
 
-        public static void CircleSegments(IntPtr circles, IntPtr smallCircles)
+        public void CircleSegments(IntPtr circles, IntPtr smallCircles)
         {
             if (_circleSegments == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1661,7 +1661,7 @@ namespace IfcEngineCS
             _circleSegments.Invoke(circles, smallCircles);
         }
 
-        public static void CleanMemory(IntPtr model, IntPtr mode)
+        public void CleanMemory(IntPtr model, IntPtr mode)
         {
             if (_cleanMemory == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1669,7 +1669,7 @@ namespace IfcEngineCS
             _cleanMemory.Invoke(model, mode);
         }
 
-        public static IntPtr InternalGetP21Line(IntPtr instance)
+        public IntPtr InternalGetP21Line(IntPtr instance)
         {
             if (_internalGetP21Line == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1677,7 +1677,7 @@ namespace IfcEngineCS
             return _internalGetP21Line.Invoke(instance);
         }
 
-        public static IntPtr InternalGetInstanceFromP21Line(IntPtr model, IntPtr P21Line)
+        public IntPtr InternalGetInstanceFromP21Line(IntPtr model, IntPtr P21Line)
         {
             if (_internalGetInstanceFromP21Line == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1685,7 +1685,7 @@ namespace IfcEngineCS
             return _internalGetInstanceFromP21Line.Invoke(model, P21Line);
         }
 
-        public static IntPtr SetStringUnicode(IntPtr unicode)
+        public IntPtr SetStringUnicode(IntPtr unicode)
         {
             if (_setStringUnicode == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1696,17 +1696,17 @@ namespace IfcEngineCS
 
         #region Geometry Interaction
 
-        private static Delegates.initializeModellingInstance _initializeModellingInstance;
-        private static Delegates.finalizeModelling _finalizeModelling;
-        private static Delegates.finalizeModelling_64 _finalizeModelling_64;
-        private static Delegates.finalizeModelling_d _finalizeModelling_d;
-        private static Delegates.finalizeModelling_d64 _finalizeModelling_d64;
-        private static Delegates.getInstanceInModelling _getInstanceInModelling;
-        private static Delegates.setVertexOffset _setVertexOffset;
-        private static Delegates.setFilter _setFilter;
-        private static Delegates.setFormat _setFormat;
-        private static Delegates.getConceptualFaceCnt _getConceptualFaceCnt;
-        private static Delegates.getConceptualFaceEx _getConceptualFaceEx;
+        private Delegates.initializeModellingInstance _initializeModellingInstance;
+        private Delegates.finalizeModelling _finalizeModelling;
+        private Delegates.finalizeModelling_64 _finalizeModelling_64;
+        private Delegates.finalizeModelling_d _finalizeModelling_d;
+        private Delegates.finalizeModelling_d64 _finalizeModelling_d64;
+        private Delegates.getInstanceInModelling _getInstanceInModelling;
+        private Delegates.setVertexOffset _setVertexOffset;
+        private Delegates.setFilter _setFilter;
+        private Delegates.setFormat _setFormat;
+        private Delegates.getConceptualFaceCnt _getConceptualFaceCnt;
+        private Delegates.getConceptualFaceEx _getConceptualFaceEx;
 
         /// <summary>
         /// The number of vertices and number of indices needed for storing the geometry of the given IFC instance is calculated by this function.
@@ -1717,7 +1717,7 @@ namespace IfcEngineCS
         /// <param name="scale">Ignore this argument use 1 as default value.</param>
         /// <param name="instance">Handle of an instance within an IFC file, for example #31313 = IFCWALLSTANDARDCASE(...)</param>
         /// <returns></returns>
-        public static IntPtr InitializeModellingInstance(IntPtr model, ref IntPtr noVertices, ref IntPtr noIndices, double scale, IntPtr instance)
+        public IntPtr InitializeModellingInstance(IntPtr model, ref IntPtr noVertices, ref IntPtr noIndices, double scale, IntPtr instance)
         {
             if (_initializeModellingInstance == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1733,7 +1733,7 @@ namespace IfcEngineCS
         /// <param name="indices">The array containing the space for index information.</param>
         /// <param name="FVF">Ignore this argument use 0 as default value. Its original use is covered by setFormat().</param>
         /// <returns></returns>
-        public static IntPtr FinalizeModelling(IntPtr model, float[] vertices, Int32[] indices, IntPtr FVF)
+        public IntPtr FinalizeModelling(IntPtr model, float[] vertices, Int32[] indices, IntPtr FVF)
         {
             if (_finalizeModelling == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1749,7 +1749,7 @@ namespace IfcEngineCS
         /// <param name="indices">The array containing the space for index information.</param>
         /// <param name="FVF">Ignore this argument use 0 as default value. Its original use is covered by setFormat().</param>
         /// <returns></returns>
-        public static IntPtr FinalizeModelling(IntPtr model, float[] vertices, Int64[] indices, IntPtr FVF)
+        public IntPtr FinalizeModelling(IntPtr model, float[] vertices, Int64[] indices, IntPtr FVF)
         {
             if (_finalizeModelling == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1765,7 +1765,7 @@ namespace IfcEngineCS
         /// <param name="indices">The array containing the space for index information.</param>
         /// <param name="FVF">Ignore this argument use 0 as default value. Its original use is covered by setFormat().</param>
         /// <returns></returns>
-        public static IntPtr FinalizeModelling(IntPtr model, double[] vertices, Int32[] indices, IntPtr FVF)
+        public IntPtr FinalizeModelling(IntPtr model, double[] vertices, Int32[] indices, IntPtr FVF)
         {
             if (_finalizeModelling == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1781,7 +1781,7 @@ namespace IfcEngineCS
         /// <param name="indices">The array containing the space for index information.</param>
         /// <param name="FVF">Ignore this argument use 0 as default value. Its original use is covered by setFormat().</param>
         /// <returns></returns>
-        public static IntPtr FinalizeModelling(IntPtr model, double[] vertices, Int64[] indices, IntPtr FVF)
+        public IntPtr FinalizeModelling(IntPtr model, double[] vertices, Int64[] indices, IntPtr FVF)
         {
             if (_finalizeModelling == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1799,7 +1799,7 @@ namespace IfcEngineCS
         /// <param name="startIndex">The first index in the array of relevance for this instance (can be used to improve performance of the rendering engine).</param>
         /// <param name="primitiveCount">The number of primitives available (for example 4 primitives and the case we have triangles means 12 following indices representing the data on the index array).</param>
         /// <returns></returns>
-        public static IntPtr GetInstanceInModelling(IntPtr model, IntPtr instance, IntPtr mode, ref IntPtr startVertex,
+        public IntPtr GetInstanceInModelling(IntPtr model, IntPtr instance, IntPtr mode, ref IntPtr startVertex,
             ref IntPtr startIndex, ref IntPtr primitiveCount)
         {
             if (_getInstanceInModelling == null) {
@@ -1815,7 +1815,7 @@ namespace IfcEngineCS
         /// <param name="x">X value for offset of each vertex.</param>
         /// <param name="y">Y value for offset of each vertex.</param>
         /// <param name="z">Z value for offset of each vertex.</param>
-        public static void SetVertexOffset(IntPtr model, double x, double y, double z)
+        public void SetVertexOffset(IntPtr model, double x, double y, double z)
         {
             if (_setVertexOffset == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1823,7 +1823,7 @@ namespace IfcEngineCS
             _setVertexOffset.Invoke(model, x, y, z);
         }
 
-        public static void SetFilter(IntPtr model, IntPtr setting, IntPtr mask)
+        public void SetFilter(IntPtr model, IntPtr setting, IntPtr mask)
         {
             if (_setFilter == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1831,7 +1831,7 @@ namespace IfcEngineCS
             _setFilter.Invoke(model, setting, mask);
         }
 
-        public static void SetFormat(IntPtr model, IntPtr setting, IntPtr mask)
+        public void SetFormat(IntPtr model, IntPtr setting, IntPtr mask)
         {
             if (_setFormat == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1839,7 +1839,7 @@ namespace IfcEngineCS
             _setFormat.Invoke(model, setting, mask);
         }
 
-        public static IntPtr GetConceptualFaceCount(IntPtr instance)
+        public IntPtr GetConceptualFaceCount(IntPtr instance)
         {
             if (_getConceptualFaceCnt == null) {
                 throw new Exception("Failed in loading IfcEngine.");
@@ -1863,7 +1863,7 @@ namespace IfcEngineCS
         /// <param name="startIndexConceptualFacePolygons"></param>
         /// <param name="noIndicesConceptualFacePolygons"></param>
         /// <returns></returns>
-        public static IntPtr GetConceptualFaceEx(IntPtr instance, IntPtr index, ref IntPtr startIndexTriangles,
+        public IntPtr GetConceptualFaceEx(IntPtr instance, IntPtr index, ref IntPtr startIndexTriangles,
             ref IntPtr noIndicesTriangles, ref IntPtr startIndexLines, ref IntPtr noIndicesLines,
             ref IntPtr startIndexPoints, ref IntPtr noIndicesPoints, ref IntPtr startIndexFacesPolygons,
             ref IntPtr noIndicesFacesPolygons, ref IntPtr startIndexConceptualFacePolygons,
@@ -1877,6 +1877,83 @@ namespace IfcEngineCS
                 ref startIndexFacesPolygons, ref noIndicesFacesPolygons, ref startIndexConceptualFacePolygons, ref noIndicesConceptualFacePolygons);
         }
         #endregion
+
+        #region Engine Const
+        private const int flagbit0 = 1;           // 2^^0    0000.0000..0000.0001
+        private const int flagbit1 = 2;           // 2^^1    0000.0000..0000.0010
+        private const int flagbit2 = 4;           // 2^^2    0000.0000..0000.0100
+        private const int flagbit3 = 8;           // 2^^3    0000.0000..0000.1000
+        private const int flagbit4 = 16;          // 2^^4    0000.0000..0001.0000
+        private const int flagbit5 = 32;          // 2^^5    0000.0000..0010.0000
+        private const int flagbit6 = 64;          // 2^^6    0000.0000..0100.0000
+        private const int flagbit7 = 128;         // 2^^7    0000.0000..1000.0000
+        private const int flagbit8 = 256;         // 2^^8    0000.0001..0000.0000
+        private const int flagbit9 = 512;         // 2^^9    0000.0010..0000.0000
+        private const int flagbit10 = 1024;       // 2^^10   0000.0100..0000.0000
+        private const int flagbit11 = 2048;       // 2^^11   0000.1000..0000.0000
+        private const int flagbit12 = 4096;       // 2^^12   0001.0000..0000.0000
+        private const int flagbit13 = 8192;       // 2^^13   0010.0000..0000.0000
+        private const int flagbit14 = 16384;      // 2^^14   0100.0000..0000.0000
+        private const int flagbit15 = 32768;      // 2^^15   1000.0000..0000.0000
+
+        private const int sdaiADB = 1;
+        private const int sdaiAGGR = sdaiADB + 1;
+        private const int sdaiBINARY = sdaiAGGR + 1;
+        private const int sdaiBOOLEAN = sdaiBINARY + 1;
+        private const int sdaiENUM = sdaiBOOLEAN + 1;
+        private const int sdaiINSTANCE = sdaiENUM + 1;
+        private const int sdaiINTEGER = sdaiINSTANCE + 1;
+        private const int sdaiLOGICAL = sdaiINTEGER + 1;
+        private const int sdaiREAL = sdaiLOGICAL + 1;
+        private const int sdaiSTRING = sdaiREAL + 1;
+        private const int sdaiUNICODE = sdaiSTRING + 1;
+        private const int sdaiEXPRESSSTRING = sdaiUNICODE + 1;
+        private const int engiGLOBALID = sdaiEXPRESSSTRING + 1;
+        #endregion
+
+        public enum Mask : int
+        {
+            /// <summary>
+            /// use single precision and 32bit index array, turn normals, triangles, wireframe off
+            /// </summary>
+            Default = 0,
+            DoublePrecision = flagbit2,
+            UseIndex64 = flagbit3,
+            GenNormals = flagbit5,
+            GenTriangles = flagbit8,
+            GenWireFrame = flagbit12,
+        }
+
+        public enum Setting : int
+        {
+            /// <summary>
+            /// use single precision and 32bit index array, turn normals, triangles, wireframe off
+            /// </summary>
+            Default = 0,
+            DoublePrecision = flagbit2,
+            UseIndex64 = flagbit3,
+            GenNormals = flagbit5,
+            GenTriangles = flagbit8,
+            GenWireframe = flagbit12
+        }
+
+        public enum SdaiType : int
+        {
+            None = 0,
+            ADB = sdaiADB,
+            Aggregation = sdaiAGGR,
+            Binary = sdaiBINARY,
+            Boolean = sdaiBOOLEAN,
+            Enum = sdaiENUM,
+            Instance = sdaiINSTANCE,
+            Integer = sdaiINTEGER,
+            Logical = sdaiLOGICAL,
+            Real = sdaiREAL,
+            String = sdaiSTRING,
+            Unicode = sdaiUNICODE,
+            ExpressString = sdaiEXPRESSSTRING,
+            GlobalId = engiGLOBALID
+        }
 
         class Delegates
         {

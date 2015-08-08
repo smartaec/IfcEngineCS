@@ -16,7 +16,7 @@ using Ptr32 = System.IntPtr;
 namespace IfcEngineCS
 {
 
-    public static partial class IfcEngine
+    public partial class IfcEngine
     {
         public const string Path_x32 = @"IFCEngine_x32.dll";
 

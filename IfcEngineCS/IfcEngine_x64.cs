@@ -15,7 +15,7 @@ using Ptr64 = System.IntPtr;
 
 namespace IfcEngineCS
 {
-    public static partial class IfcEngine
+    public partial class IfcEngine
     {
         public const string Path_x64 = @"IFCEngine_x64.dll";
 
