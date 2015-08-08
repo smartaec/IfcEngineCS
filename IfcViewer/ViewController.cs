@@ -79,6 +79,7 @@ namespace IFCViewer
         public int indexOffsetForWireFrame;
 
         public IFCTreeItem ifcTreeItem = null;
+        public MeshGeometryVisual3D Mesh3d;
     }
 
     /// <summary>
@@ -101,7 +102,9 @@ namespace IFCViewer
 
         private Dictionary<MeshGeometryVisual3D, IFCItem> _meshToIfcItems = null;
         private IfcEngine _ifcEngine = null;
-
+        private Brush _hoverBrush = Brushes.BlueViolet;
+        private Brush _selectBrush = Brushes.Chartreuse;
+        private Brush _defaultBrush = Brushes.Gray;
         public ViewController()
         {
             _ifcEngine = new IfcEngine();
@@ -260,7 +263,7 @@ namespace IFCViewer
 
                         for (int j = 0; j < 3; j++) {
                             _minCorner[j] = Math.Min(_minCorner[j], pVertices[6 * i + j]);
-                            _minCorner[j] = Math.Min(_minCorner[j], pVertices[6 * i + j]);
+                            _maxCorner[j] = Math.Max(_maxCorner[j], pVertices[6 * i + j]);
                         }
 
                         i++;
@@ -403,7 +406,6 @@ namespace IFCViewer
                 if (_enableHover == false) {
                     if (_hoverIfcItem != null) {
                         _hoverIfcItem = null;
-
                         Redraw();
                     }
                 }
@@ -433,6 +435,7 @@ namespace IFCViewer
         public bool OpenIFCFile(string ifcFilePath)
         {
             _rootIfcItem = null;
+            Reset();
 
             if (ParseIfcFile(ifcFilePath) == true) {
                 InitModel();
@@ -445,59 +448,58 @@ namespace IFCViewer
 
         private void BindMouseHandler()
         {
-            hVp3D.MouseDown += hVp3D_MouseDown;
             hVp3D.MouseUp += hVp3D_MouseUp;
+            hVp3D.MouseMove += hVp3D_MouseMove;
         }
 
-        private bool leftDown = false;
-        private System.Windows.Point selectStart;
+        void hVp3D_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            if (_enableHover) {
+                var point = Mouse.GetPosition(hVp3D);
+                var hit = hVp3D.FindNearestVisual(point);
+                OnModelHovered(hit);
+            }
+        }
+
         void hVp3D_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left) {
                 var point = Mouse.GetPosition(hVp3D);
-                var vec = point - selectStart;
-                if (vec.LengthSquared > 16) {
-                    var hint = SelectionHitMode.Inside;
-                    if (vec.X < 0 || vec.Y < 0) {
-                        hint = SelectionHitMode.Touch;
-                    }
-                    Rect rect = new Rect(selectStart, vec);
-                    var hits = hVp3D.Viewport.FindHits(rect, hint).Select(r => r.Model);
-                    OnModelSelected(hits);
-                } else {
-                    var hit = hVp3D.Viewport.FindHits(point).OrderBy(r => r.Distance).Select(r => r.Model).FirstOrDefault();
-                    OnModelSelected(hit);
+                var hit = hVp3D.FindNearestVisual(point);
+                OnModelSelected(hit);
+            }
+        }
+
+        private void OnModelHovered(Visual3D model)
+        {
+            if (_hoverIfcItem != null) {
+                FillMeshByIfcColor(_hoverIfcItem);
+                _hoverIfcItem = null;
+            }
+            if (model != null) {
+                var mesh = (model as MeshGeometryVisual3D);
+                if (_meshToIfcItems.ContainsKey(mesh)) {
+                    mesh.Fill = _hoverBrush;
+                    _hoverIfcItem = _meshToIfcItems[mesh];
                 }
-
-                leftDown = false;
-            }
-        }
-
-        void hVp3D_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Left) {
-                selectStart = Mouse.GetPosition(hVp3D);
-                leftDown = true;
-            }
-        }
-
-        private void OnModelSelected(IEnumerable<Model3D> models)
-        {
-            if (models != null) {
-                Console.WriteLine(models.Count() + " hits");
-            } else {
-                Console.WriteLine("0 hits");
             }
 
             Redraw();
         }
-        private void OnModelSelected(Model3D model)
+
+        private void OnModelSelected(Visual3D model)
         {
+            if (_selectedIfcItem != null) {
+                FillMeshByIfcColor(_selectedIfcItem);
+                _selectedIfcItem = null;
+            }
+
             if (model != null) {
-                Console.WriteLine("1 hits");
-                var bound = (model as GeometryModel3D).Geometry.Bounds;
-            } else {
-                Console.WriteLine("0 hits");
+                var mesh = (model as MeshGeometryVisual3D);
+                if (_meshToIfcItems.ContainsKey(mesh)) {
+                    mesh.Fill = _selectBrush;
+                    _selectedIfcItem = _meshToIfcItems[mesh];
+                }
             }
 
             Redraw();
@@ -505,20 +507,21 @@ namespace IFCViewer
 
         private void InitModel()
         {
+            Vector3D center = new Vector3D((_minCorner[0] + _maxCorner[0]) / 2.0, (_minCorner[1] + _maxCorner[1]) / 2.0, (_minCorner[2] + _maxCorner[2]) / 2.0);
             hVp3D.Children.Clear();
             var lights = new DefaultLights();
             hVp3D.Children.Add(lights);
-            CreateMeshes();
+            CreateMeshes(center);
             var bound = hVp3D.Children.FindBounds();
             hVp3D.ZoomExtents(bound);
         }
 
-        private void CreateMeshes()
+        private void CreateMeshes(Vector3D center)
         {
-            CreateFaceModels(_rootIfcItem);
+            CreateFaceModels(_rootIfcItem, center);
         }
 
-        private void CreateFaceModels(IFCItem item)
+        private void CreateFaceModels(IFCItem item, Vector3D center)
         {
             while (item != null) {
                 if (item.ifcID != IntPtr.Zero && item.noVerticesForFaces != 0 && item.noPrimitivesForFaces != 0) {
@@ -526,7 +529,7 @@ namespace IFCViewer
                     var normals = new Vector3DCollection();
                     if (item.verticesForFaces != null) {
                         for (int i = 0; i < item.noVerticesForFaces; i++) {
-                            var point = new Point3D(item.verticesForFaces[6 * i + 0], item.verticesForFaces[6 * i + 1], item.verticesForFaces[6 * i + 2]);
+                            var point = new Point3D(item.verticesForFaces[6 * i + 0] - center.X, item.verticesForFaces[6 * i + 1] - center.Y, item.verticesForFaces[6 * i + 2] - center.Z);
                             var normal = new Vector3D(item.verticesForFaces[6 * i + 3], item.verticesForFaces[6 * i + 4], item.verticesForFaces[6 * i + 5]);
                             positions.Add(point);
                             normals.Add(normal);
@@ -550,18 +553,30 @@ namespace IFCViewer
                     meshGeometry.TriangleIndices = indices;
                     MeshGeometryVisual3D mesh = new MeshGeometryVisual3D();
                     mesh.MeshGeometry = meshGeometry;
+                    item.Mesh3d = mesh;
+                    _meshToIfcItems[mesh] = item;
 
-                    if (item.ifcTreeItem.ifcColor != null) {
-                        var ifcColor = item.ifcTreeItem.ifcColor;
-                        var color = System.Windows.Media.Color.FromArgb((byte)(255 - ifcColor.A * 255), (byte)(ifcColor.R * 255), (byte)(ifcColor.G * 255), (byte)(ifcColor.B * 255));
-                        mesh.Fill = new SolidColorBrush(color);
-                    }
+                    FillMeshByIfcColor(item);
 
                     hVp3D.Children.Add(mesh);
                 }
 
-                CreateFaceModels(item.child);
+                CreateFaceModels(item.child, center);
                 item = item.next;
+            }
+        }
+
+        private void FillMeshByIfcColor(IFCItem item)
+        {
+            if (item.Mesh3d != null) {
+                if (item.ifcTreeItem.ifcColor != null) {
+                    var ifcColor = item.ifcTreeItem.ifcColor;
+                    var color = Color.FromArgb((byte)(255 - ifcColor.A * 255),
+                        (byte)(ifcColor.R * 255), (byte)(ifcColor.G * 255), (byte)(ifcColor.B * 255));
+                    item.Mesh3d.Fill = new SolidColorBrush(color);
+                } else {
+                    item.Mesh3d.Fill = _defaultBrush;
+                }
             }
         }
 
