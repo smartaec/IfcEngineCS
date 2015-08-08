@@ -5,16 +5,32 @@ VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IfcEngineCS", "IfcEngineCS\IfcEngineCS.csproj", "{184220D2-A753-44F6-A607-B53B19A55E8F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IfcViewer", "IfcViewer\IfcViewer.csproj", "{021F2965-2707-4BF4-82C0-7FF05BE1040B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{184220D2-A753-44F6-A607-B53B19A55E8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{184220D2-A753-44F6-A607-B53B19A55E8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{184220D2-A753-44F6-A607-B53B19A55E8F}.Debug|x86.ActiveCfg = Debug|x86
+		{184220D2-A753-44F6-A607-B53B19A55E8F}.Debug|x86.Build.0 = Debug|x86
 		{184220D2-A753-44F6-A607-B53B19A55E8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{184220D2-A753-44F6-A607-B53B19A55E8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{184220D2-A753-44F6-A607-B53B19A55E8F}.Release|x86.ActiveCfg = Release|x86
+		{184220D2-A753-44F6-A607-B53B19A55E8F}.Release|x86.Build.0 = Release|x86
+		{021F2965-2707-4BF4-82C0-7FF05BE1040B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{021F2965-2707-4BF4-82C0-7FF05BE1040B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{021F2965-2707-4BF4-82C0-7FF05BE1040B}.Debug|x86.ActiveCfg = Debug|x86
+		{021F2965-2707-4BF4-82C0-7FF05BE1040B}.Debug|x86.Build.0 = Debug|x86
+		{021F2965-2707-4BF4-82C0-7FF05BE1040B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{021F2965-2707-4BF4-82C0-7FF05BE1040B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{021F2965-2707-4BF4-82C0-7FF05BE1040B}.Release|x86.ActiveCfg = Release|x86
+		{021F2965-2707-4BF4-82C0-7FF05BE1040B}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

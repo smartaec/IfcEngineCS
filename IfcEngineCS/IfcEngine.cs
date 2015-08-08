@@ -20,6 +20,7 @@ namespace IfcEngineCS
         {
             if (Environment.Is64BitProcess) {
                 #region File IO
+                _sdaiCloseModel = sdaiCloseModel_x32;
                 _sdaiCreateModelBn = sdaiCreateModelBN_x64;
                 _sdaiCreateModelBn_byte = sdaiCreateModelBN_x64;
                 _sdaiCreateModelBn_unicode = sdaiCreateModelBNUnicode_x64;
@@ -138,6 +139,7 @@ namespace IfcEngineCS
                 #endregion
             } else {
                 #region File IO
+                _sdaiCloseModel = sdaiCloseModel_x32;
                 _sdaiCreateModelBn = sdaiCreateModelBN_x32;
                 _sdaiCreateModelBn_byte = sdaiCreateModelBN_x32;
                 _sdaiCreateModelBn_unicode = sdaiCreateModelBNUnicode_x32;
@@ -781,12 +783,12 @@ namespace IfcEngineCS
         private Delegates.SetSPFFHeaderItem _setSpffHeaderItem;
         private Delegates.SetSPFFHeaderItem_byte _setSpffHeaderItem_byte;
 
-        public IntPtr GetSPFFHeaderItem(IntPtr model, IntPtr itemIndex, IntPtr itemSubIndex, IntPtr valueType, out IntPtr value)
+        public IntPtr GetSPFFHeaderItem(IntPtr model, int itemIndex, int itemSubIndex, SdaiType valueType, out IntPtr value)
         {
             if (_getSpffHeaderItem == null) {
                 throw new Exception("Failed in loading IfcEngine.");
             }
-            return _getSpffHeaderItem.Invoke(model, itemIndex, itemSubIndex, valueType, out value);
+            return _getSpffHeaderItem.Invoke(model, new IntPtr(itemIndex), new IntPtr(itemSubIndex), new IntPtr((int)valueType), out value);
         }
 
         /// <summary>
@@ -928,12 +930,12 @@ namespace IfcEngineCS
         /// <param name="ADB">Handle to ADB type, a typical representation is IFCLABEL('myLabel') or IFCINTEGER(313).</param>
         /// <param name="valueType">Type of the value, for example sdaiSTRING, sdaiINSTANCE, sdaiREAL, ...</param>
         /// <param name="value">Placeholder for the information, formatting depending on defined valueType.</param>
-        public void GetADBValue(IntPtr ADB, IntPtr valueType, out double value)
+        public void GetADBValue(IntPtr ADB, SdaiType valueType, out double value)
         {
             if (_sdaiGetAdbValue_d == null) {
                 throw new Exception("Failed in loading IfcEngine.");
             }
-            _sdaiGetAdbValue_d.Invoke(ADB, valueType, out value);
+            _sdaiGetAdbValue_d.Invoke(ADB, new IntPtr((int)valueType), out value);
         }
 
         /// <summary>
@@ -944,13 +946,13 @@ namespace IfcEngineCS
         /// <param name="valueType">Type of the value, for example sdaiSTRING, sdaiINSTANCE, sdaiREAL, ...</param>
         /// <param name="value">Placeholder for the information, formatting depending on defined valueType.</param>
         /// <returns></returns>
-        public IntPtr GetAggregationElement(IntPtr aggregate, IntPtr elementIndex, IntPtr valueType,
+        public IntPtr GetAggregationElement(IntPtr aggregate, int elementIndex, SdaiType valueType,
             out IntPtr value)
         {
             if (_engiGetAggrElement == null) {
                 throw new Exception("Failed in loading IfcEngine.");
             }
-            return _engiGetAggrElement.Invoke(aggregate, elementIndex, valueType, out value);
+            return _engiGetAggrElement.Invoke(aggregate, new IntPtr(elementIndex), new IntPtr((int)valueType), out value);
         }
 
         /// <summary>
@@ -961,13 +963,13 @@ namespace IfcEngineCS
         /// <param name="valueType">Type of the value, for example sdaiSTRING, sdaiINSTANCE, sdaiREAL, ...</param>
         /// <param name="value">Placeholder for the information, formatting depending on defined valueType.</param>
         /// <returns></returns>
-        public IntPtr GetAggregationElement(IntPtr aggregate, IntPtr elementIndex, IntPtr valueType,
+        public IntPtr GetAggregationElement(IntPtr aggregate, int elementIndex, SdaiType valueType,
             out double value)
         {
             if (_engiGetAggrElement_d == null) {
                 throw new Exception("Failed in loading IfcEngine.");
             }
-            return _engiGetAggrElement_d.Invoke(aggregate, elementIndex, valueType, out value);
+            return _engiGetAggrElement_d.Invoke(aggregate, new IntPtr(elementIndex), new IntPtr((int)valueType), out value);
         }
 
         /// <summary>
@@ -991,12 +993,12 @@ namespace IfcEngineCS
         /// <param name="valueType">Type of the value, for example sdaiSTRING, sdaiINSTANCE, sdaiREAL, ...</param>
         /// <param name="value">Placeholder for the information, formatting depending on defined valueType.</param>
         /// <returns></returns>
-        public IntPtr GetAttribute(IntPtr instance, IntPtr attribute, IntPtr valueType, out IntPtr value)
+        public IntPtr GetAttribute(IntPtr instance, IntPtr attribute, SdaiType valueType, out IntPtr value)
         {
             if (_sdaiGetAttr == null) {
                 throw new Exception("Failed in loading IfcEngine.");
             }
-            return _sdaiGetAttr.Invoke(instance, attribute, valueType, out value);
+            return _sdaiGetAttr.Invoke(instance, attribute, new IntPtr((int)valueType), out value);
         }
 
         /// <summary>
@@ -1007,12 +1009,12 @@ namespace IfcEngineCS
         /// <param name="valueType">Type of the value, for example sdaiSTRING, sdaiINSTANCE, sdaiREAL, ...</param>
         /// <param name="value">Placeholder for the information, formatting depending on defined valueType.</param>
         /// <returns></returns>
-        public IntPtr GetAttribute(IntPtr instance, IntPtr attribute, IntPtr valueType, out double value)
+        public IntPtr GetAttribute(IntPtr instance, IntPtr attribute, SdaiType valueType, out double value)
         {
             if (_sdaiGetAttr_d == null) {
                 throw new Exception("Failed in loading IfcEngine.");
             }
-            return _sdaiGetAttr_d.Invoke(instance, attribute, valueType, out value);
+            return _sdaiGetAttr_d.Invoke(instance, attribute, new IntPtr((int)valueType), out value);
         }
 
         /// <summary>
@@ -1023,12 +1025,12 @@ namespace IfcEngineCS
         /// <param name="valueType">Type of the value, for example sdaiSTRING, sdaiINSTANCE, sdaiREAL, ...</param>
         /// <param name="value">Placeholder for the information, formatting depending on defined valueType.</param>
         /// <returns></returns>
-        public IntPtr GetAttribute(IntPtr instance, string attributeName, IntPtr valueType, out IntPtr value)
+        public IntPtr GetAttribute(IntPtr instance, string attributeName, SdaiType valueType, out IntPtr value)
         {
             if (_sdaiGetAttrBn == null) {
                 throw new Exception("Failed in loading IfcEngine.");
             }
-            return _sdaiGetAttrBn.Invoke(instance, attributeName, valueType, out value);
+            return _sdaiGetAttrBn.Invoke(instance, attributeName, new IntPtr((int)valueType), out value);
         }
 
         /// <summary>
@@ -1039,12 +1041,12 @@ namespace IfcEngineCS
         /// <param name="valueType">Type of the value, for example sdaiSTRING, sdaiINSTANCE, sdaiREAL, ...</param>
         /// <param name="value">Placeholder for the information, formatting depending on defined valueType.</param>
         /// <returns></returns>
-        public IntPtr GetAttribute(IntPtr instance, string attributeName, IntPtr valueType, out double value)
+        public IntPtr GetAttribute(IntPtr instance, string attributeName, SdaiType valueType, out double value)
         {
             if (_sdaiGetAttrBn_d == null) {
                 throw new Exception("Failed in loading IfcEngine.");
             }
-            return _sdaiGetAttrBn_d.Invoke(instance, attributeName, valueType, out value);
+            return _sdaiGetAttrBn_d.Invoke(instance, attributeName, new IntPtr((int)valueType), out value);
         }
 
         /// <summary>
@@ -1056,13 +1058,13 @@ namespace IfcEngineCS
         /// <param name="value">Placeholder for the information, formatting depending on defined valueType.</param>
         /// <returns></returns>
         [Obsolete("Will be removed in next version.")]
-        public IntPtr GetAttribute(IntPtr instance, byte[] attributeName, IntPtr valueType,
+        public IntPtr GetAttribute(IntPtr instance, byte[] attributeName, SdaiType valueType,
             out IntPtr value)
         {
             if (_sdaiGetAttrBn_byte == null) {
                 throw new Exception("Failed in loading IfcEngine.");
             }
-            return _sdaiGetAttrBn_byte.Invoke(instance, attributeName, valueType, out value);
+            return _sdaiGetAttrBn_byte.Invoke(instance, attributeName, new IntPtr((int)valueType), out value);
         }
 
         /// <summary>
@@ -1074,13 +1076,13 @@ namespace IfcEngineCS
         /// <param name="value">Placeholder for the information, formatting depending on defined valueType.</param>
         /// <returns></returns>
         [Obsolete("Will be removed in next version.")]
-        public IntPtr GetAttribute(IntPtr instance, byte[] attributeName, IntPtr valueType,
+        public IntPtr GetAttribute(IntPtr instance, byte[] attributeName, SdaiType valueType,
             out double value)
         {
             if (_sdaiGetAttrBn_byte_d == null) {
                 throw new Exception("Failed in loading IfcEngine.");
             }
-            return _sdaiGetAttrBn_byte_d.Invoke(instance, attributeName, valueType, out value);
+            return _sdaiGetAttrBn_byte_d.Invoke(instance, attributeName, new IntPtr((int)valueType), out value);
         }
 
         /// <summary>
