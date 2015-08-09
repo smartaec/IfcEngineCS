@@ -37,11 +37,6 @@ namespace IFCViewer
 
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            this.splitContainer1.Panel2.BackColor = Color.Transparent;
-        }
-
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();

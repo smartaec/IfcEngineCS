@@ -80,6 +80,7 @@ namespace IFCViewer
 
         public IFCTreeItem ifcTreeItem = null;
         public MeshGeometryVisual3D Mesh3d;
+        public LinesVisual3D Wireframe;
     }
 
     /// <summary>
@@ -104,6 +105,7 @@ namespace IFCViewer
         private IfcEngine _ifcEngine = null;
         private Brush _hoverBrush = Brushes.BlueViolet;
         private Brush _selectBrush = Brushes.Chartreuse;
+        private Color _defaultLineColor = Color.FromRgb(0, 0, 0);
         private Brush _defaultBrush = Brushes.Gray;
         public ViewController()
         {
@@ -516,8 +518,50 @@ namespace IFCViewer
             var lights = new DefaultLights();
             hVp3D.Children.Add(lights);
             CreateMeshes(center);
+            CreateWireframes(center);
             var bound = hVp3D.Children.FindBounds();
             hVp3D.ZoomExtents(bound);
+        }
+
+        private void CreateWireframes(Vector3D center)
+        {
+            CreateWireFrameModels(_rootIfcItem, center);
+        }
+
+        private void CreateWireFrameModels(IFCItem item, Vector3D center)
+        {
+            while (item != null) {
+                if (item.ifcID != IntPtr.Zero && item.noVerticesForWireFrame != 0 && item.noPrimitivesForWireFrame != 0) {
+                    var points = new Point3DCollection();
+                    Point3DCollection positions;
+                    if (item.verticesForWireFrame != null) {
+                        for (int i = 0; i < item.noVerticesForWireFrame; i++) {
+                            points.Add(new Point3D((item.verticesForWireFrame[3 * i + 0] - center.X), (item.verticesForWireFrame[3 * i + 1] - center.Y), (item.verticesForWireFrame[3 * i + 2] - center.Z)));
+                        }
+                    }
+
+                    if (item.indicesForWireFrameLineParts != null) {
+                        positions = new Point3DCollection();
+                        for (int i = 0; i < item.noPrimitivesForWireFrame; i++) {
+                            var idx = item.indicesForWireFrameLineParts[2 * i + 0];
+                            positions.Add(points[idx]);
+                            idx = item.indicesForWireFrameLineParts[2 * i + 1];
+                            positions.Add(points[idx]);
+                        }
+                    } else {
+                        positions = points;
+                    }
+
+                    LinesVisual3D wireframe = new LinesVisual3D();
+                    wireframe.Points = positions;
+                    wireframe.Color = _defaultLineColor;
+                    item.Wireframe = wireframe;
+                    hVp3D.Children.Add(wireframe);
+                }
+
+                CreateFaceModels(item.child, center);
+                item = item.next;
+            }
         }
 
         private void CreateMeshes(Vector3D center)
