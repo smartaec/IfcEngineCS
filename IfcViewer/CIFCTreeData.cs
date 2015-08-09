@@ -80,7 +80,7 @@ namespace IFCViewer
         /// <summary>
         /// Viewer
         /// </summary>
-        ViewController _ifcViewer = null;
+        ViewController _viewController = null;
 
         /// <summary>
         /// Model
@@ -145,7 +145,7 @@ namespace IFCViewer
 
             Cursor.Current = Cursors.WaitCursor;
 
-            _ifcViewer = ifcViewer;
+            _viewController = ifcViewer;
             _ifcModel = ifcModel;
             _ifcRoot = ifcRoot;
             _treeControl = treeControl;
@@ -1021,7 +1021,7 @@ namespace IFCViewer
                         OnNodeMouseClick_UpdateChildrenTreeItems(e.Node);
                         UpdateParentTreeItems(e.Node);
 
-                        _ifcViewer.Redraw();
+                        _viewController.Redraw();
                     }
                     break;
 
@@ -1031,7 +1031,7 @@ namespace IFCViewer
                         OnNodeMouseClick_UpdateChildrenTreeItems(e.Node);
                         UpdateParentTreeItems(e.Node);
 
-                        _ifcViewer.Redraw();
+                        _viewController.Redraw();
                     }
                     break;
             } // switch (e.Node.ImageIndex)
@@ -1043,6 +1043,11 @@ namespace IFCViewer
         /// <param name="tnParent"></param>
         private void OnNodeMouseClick_UpdateChildrenTreeItems(TreeNode tnParent)
         {
+            var treeItem = (tnParent.Tag as IFCTreeItem);
+            if (treeItem != null && treeItem.ifcItem != null && treeItem.ifcItem.Mesh3d != null) {
+                treeItem.ifcItem.Mesh3d.Visible = (tnParent.ImageIndex == IMAGE_CHECKED);
+            }
+
             foreach (TreeNode tnChild in tnParent.Nodes) {
                 if ((tnChild.ImageIndex != IMAGE_CHECKED) && (tnChild.ImageIndex != IMAGE_UNCHECKED)) {
                     // skip properties
@@ -1107,7 +1112,7 @@ namespace IFCViewer
                 return;
             }
 
-            _ifcViewer.SelectItem((e.Node.Tag as IFCTreeItem).ifcItem);
+            _viewController.SelectItem((e.Node.Tag as IFCTreeItem).ifcItem);
         }
 
         /// <summary>
@@ -1130,7 +1135,7 @@ namespace IFCViewer
                         OnContextMenu_UpdateTreeElement(node);
                     }
 
-                    _ifcViewer.Redraw();
+                    _viewController.Redraw();
                 });
             }
         }

@@ -120,6 +120,9 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Properties\IfcViewer.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="HelixToolkit">
       <HintPath>..\packages\HelixToolkit.2015.1.552\lib\portable-net4+sl4+wp71+win8\HelixToolkit.dll</HintPath>
@@ -196,13 +199,13 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Properties\ifcviewerDoc.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\IfcEngineCS\IfcEngineCS.csproj">
       <Project>{184220d2-a753-44f6-a607-b53b19a55e8f}</Project>
       <Name>IfcEngineCS</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Properties\IfcViewer.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

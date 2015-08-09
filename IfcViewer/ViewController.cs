@@ -141,20 +141,20 @@ namespace IFCViewer
 
 
                     XmlTextReader textReader = null;
-                    if (s.Contains("IFC2") == true) {
+                    if (string.IsNullOrEmpty(s) || s.Contains("IFC2")) {
                         textReader = new XmlTextReader(xmlSettings_IFC2x3);
-                    } else {
-                        if (s.Contains("IFC4") == true) {
-                            _ifcEngine.CloseModel(ifcModel);
-                            ifcModel = _ifcEngine.OpenModel(IntPtr.Zero, sPath, "IFC4.exp");
 
-                            if (ifcModel != IntPtr.Zero)
-                                textReader = new XmlTextReader(xmlSettings_IFC4);
-                        }
+                    } else if (s.Contains("IFC4")) {
+                        _ifcEngine.CloseModel(ifcModel);
+                        ifcModel = _ifcEngine.OpenModel(IntPtr.Zero, sPath, "IFC4.exp");
+
+                        if (ifcModel != IntPtr.Zero)
+                            textReader = new XmlTextReader(xmlSettings_IFC4);
                     }
 
-                    if (textReader == null)
+                    if (textReader == null) {
                         return false;
+                    }
 
                     // if node type us an attribute
                     while (textReader.Read()) {
@@ -499,6 +499,10 @@ namespace IFCViewer
                 if (_meshToIfcItems.ContainsKey(mesh)) {
                     mesh.Fill = _selectBrush;
                     _selectedIfcItem = _meshToIfcItems[mesh];
+                    _selectedIfcItem.ifcTreeItem.treeNode.TreeView.SelectedNode = _selectedIfcItem.ifcTreeItem.treeNode;
+                    _selectedIfcItem.ifcTreeItem.treeNode.TreeView.Focus();
+                    //_selectedIfcItem.ifcTreeItem.treeNode.Expand();
+                    _selectedIfcItem.ifcTreeItem.treeNode.EnsureVisible();
                 }
             }
 
@@ -533,8 +537,6 @@ namespace IFCViewer
                             var normal = new Vector3D(item.verticesForFaces[6 * i + 3], item.verticesForFaces[6 * i + 4], item.verticesForFaces[6 * i + 5]);
                             positions.Add(point);
                             normals.Add(normal);
-
-
                         }
 
                         Debug.Assert(item.verticesForFaces.Length == item.noVerticesForFaces * 6);
@@ -582,13 +584,14 @@ namespace IFCViewer
 
         public void Redraw()
         {
-            _destControl.Invalidate();
+            _destControl.Refresh();
         }
 
         public void SelectItem(IFCItem ifcItem)
         {
-            _selectedIfcItem = ifcItem;
-
+            if (ifcItem.Mesh3d != null) {
+                OnModelSelected(ifcItem.Mesh3d);
+            }
             this.Redraw();
         }
     }

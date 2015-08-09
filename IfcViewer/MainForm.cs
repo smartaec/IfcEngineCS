@@ -26,12 +26,12 @@ namespace IFCViewer
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = "ifc Files (*.ifc)|*.ifc";
+            dialog.Filter = "ifc Files (*.ifc, *.ifcxml)|*.ifc;*.ifcxml";
             dialog.Title = "Open ifc file";
 
             if (dialog.ShowDialog() == DialogResult.OK) {
                 if (_viewController.OpenIFCFile(dialog.FileName)) {
-                    this.Text = string.Format("{0} - IfcViewer", System.IO.Path.GetFileNameWithoutExtension(dialog.FileName));
+                    this.Text = string.Format("{0} - Ifc Viewer", System.IO.Path.GetFileNameWithoutExtension(dialog.FileName));
                 }
             }
 
