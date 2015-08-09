@@ -9,7 +9,8 @@ In this repo, there is a CSharp wrapper for IfcEngine, and also a simple Ifc Vie
 4. A CSharp version of Ifc Viewer based on Helix-toolkit and this wrapper, demostrates how to use this wrapper.
 
 ## License
-this project follows MIT license; other libs or files follow there own license which listed as follows:
+this project follows MIT license (http://opensource.org/licenses/MIT); other libs or files follow there own license which listed as follows:
+
 1. both x86 and x64 version of IfcEngine.dll ( as well as *-Setting.xml) are the products of RDF Ltd., refer to there website (http://rdf.bg) for license information;
 2. Helix-toolkit: refer to (https://github.com/helix-toolkit/helix-toolkit) for license information.
 
