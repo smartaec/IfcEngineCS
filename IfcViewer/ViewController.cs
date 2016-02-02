@@ -14,8 +14,6 @@ using System.IO;
 using System.Xml;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using MouseEventArgs = System.Windows.Forms.MouseEventArgs;
-using Point = System.Drawing.Point;
 
 namespace IFCViewer
 {
