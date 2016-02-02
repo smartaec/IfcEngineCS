@@ -1680,6 +1680,11 @@ namespace IfcEngineCS
             _cleanMemory.Invoke(model, new IntPtr((int)mode));
         }
 
+        /// <summary>
+        /// get P21 line number by an instance id
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <returns></returns>
         public IntPtr InternalGetP21Line(IntPtr instance)
         {
             if (_internalGetP21Line == null) {

@@ -1,4 +1,4 @@
-# IfcEngineCS
+# IfcEngineCS ![](https://travis-ci.org/LinJiarui/IfcEngineCS.svg)
 This is a CSharp wrapper for the famous IfcEngine.dll (http://rdf.bg). Though a basic PInvoke wrapper has already provided, the users have to deal with different platforms (x86 or x64), and there is a lack of uniform API for different platforms. This is why I create this project.
 In this repo, there is a CSharp wrapper for IfcEngine, and also a simple Ifc Viewer based on CSharp and Helix-toolkit. When creating this project, C# examples and the API doc provided by RDF Ltd. were the main references, many thanks to them.
 

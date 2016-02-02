@@ -480,7 +480,7 @@ namespace IFCViewer
             }
             if (model != null) {
                 var mesh = (model as MeshGeometryVisual3D);
-                if (_meshToIfcItems.ContainsKey(mesh)) {
+                if (mesh != null && _meshToIfcItems.ContainsKey(mesh)) {
                     mesh.Fill = _hoverBrush;
                     _hoverIfcItem = _meshToIfcItems[mesh];
                 }
@@ -498,7 +498,7 @@ namespace IFCViewer
 
             if (model != null) {
                 var mesh = (model as MeshGeometryVisual3D);
-                if (_meshToIfcItems.ContainsKey(mesh)) {
+                if (mesh != null && _meshToIfcItems.ContainsKey(mesh)) {
                     mesh.Fill = _selectBrush;
                     _selectedIfcItem = _meshToIfcItems[mesh];
                     _selectedIfcItem.ifcTreeItem.treeNode.TreeView.SelectedNode = _selectedIfcItem.ifcTreeItem.treeNode;
@@ -601,7 +601,9 @@ namespace IFCViewer
                     mesh.MeshGeometry = meshGeometry;
                     item.Mesh3d = mesh;
                     _meshToIfcItems[mesh] = item;
-
+#if DEBUG
+                    OutputObj(item.ifcID.ToString(), meshGeometry);
+#endif
                     FillMeshByIfcColor(item);
 
                     hVp3D.Children.Add(mesh);
@@ -612,6 +614,19 @@ namespace IFCViewer
             }
         }
 
+        public static void OutputObj(string ifcId, MeshGeometry3D rep)
+        {
+            using (var writer = new StreamWriter("./" + ifcId + ".obj")) {
+                for (int i = 0, count = rep.Positions.Count; i < count; i++) {
+                    writer.WriteLine("v {0} {1} {2}", rep.Positions[i].X, rep.Positions[i].Y, rep.Positions[i].Z);
+                    writer.WriteLine("vn {0} {1} {2}", rep.Normals[i].X, rep.Normals[i].Y, rep.Normals[i].Z);
+                }
+                var indices = rep.TriangleIndices.Reverse().ToList();//HACK winding
+                for (int i = 0, count = indices.Count / 3; i < count; i++) {
+                    writer.WriteLine("f {0}//{0} {1}//{1} {2}//{2}", indices[i * 3] + 1, indices[i * 3 + 1] + 1, indices[i * 3 + 2] + 1);
+                }
+            }
+        }
         private void FillMeshByIfcColor(IFCItem item)
         {
             if (item.Mesh3d != null) {
@@ -633,7 +648,7 @@ namespace IFCViewer
 
         public void SelectItem(IFCItem ifcItem)
         {
-            if (ifcItem.Mesh3d != null) {
+            if (ifcItem != null && ifcItem.Mesh3d != null) {
                 OnModelSelected(ifcItem.Mesh3d);
             }
             this.Redraw();
