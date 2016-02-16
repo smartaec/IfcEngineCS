@@ -1,0 +1,43 @@
+﻿<Window x:Name="window" x:Class="IfcSharpDXSampleProject.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:hx="http://helix-toolkit.org/wpf/SharpDX"
+        xmlns:local="clr-namespace:IfcSharpDXSampleProject"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Menu Grid.Row="0">
+            <MenuItem Header="File">
+                <MenuItem Header="Open" Click="MenuItem_Click"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="View">
+                <MenuItem Header="Show wireframe" IsCheckable="True" IsChecked="{Binding ShowFireFrame,UpdateSourceTrigger=PropertyChanged}"></MenuItem>
+            </MenuItem>
+        </Menu>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120"></ColumnDefinition>
+                <ColumnDefinition Width="5"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TreeView Grid.Column="0" Name="treeview">
+            </TreeView>
+            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"></GridSplitter>
+            <hx:Viewport3DX Grid.Column="2"  x:Name="viewport" ModelUpDirection="0,0,1" ShowCoordinateSystem="True">
+                <hx:Viewport3DX.Camera>
+                    <hx:PerspectiveCamera CreateLeftHandSystem="False" Position="1,1,5" LookDirection="-1,-1,-5" UpDirection="0,0,1"/>
+                </hx:Viewport3DX.Camera>
+                <hx:GroupModel3D Children="{Binding Model,UpdateSourceTrigger=PropertyChanged}"></hx:GroupModel3D>
+                <hx:DirectionalLight3D Direction="-1,-1,-1"></hx:DirectionalLight3D>
+            </hx:Viewport3DX>
+        </Grid>
+        
+    </Grid>
+</Window>
