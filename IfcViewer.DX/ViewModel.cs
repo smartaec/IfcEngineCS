@@ -97,6 +97,38 @@ namespace IfcViewer.DX
                 }
             }
         }
+        public bool ShowSpaces
+        {
+            get
+            {
+                if (viewController != null) {
+                    return viewController.ShowSpaces;
+                }
+                return false;
+            }
+            set
+            {
+                if (viewController != null) {
+                    viewController.ShowSpaces = value;
+                }
+            }
+        }
+        public bool ShowElements
+        {
+            get
+            {
+                if (viewController != null) {
+                    return viewController.ShowElements;
+                }
+                return false;
+            }
+            set
+            {
+                if (viewController != null) {
+                    viewController.ShowElements = value;
+                }
+            }
+        }
 
         ViewController viewController;
         public MainViewModel(Viewport3DX viewport, TreeView treeview)

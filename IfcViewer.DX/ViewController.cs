@@ -104,6 +104,10 @@ namespace IfcViewer.DX
         private bool _enableFaces = true;
         private bool _enableHover = false;
 
+        private bool _showSpaces = true;
+        private bool _showElements = true;
+
+
         private IFCItem _hoverIfcItem = null;
         private IFCItem _selectedIfcItem = null;
         private float[] _minCorner;
@@ -425,6 +429,38 @@ namespace IfcViewer.DX
                 });
             }
         }
+        public bool ShowSpaces
+        {
+            get
+            {
+                return _showSpaces;
+            }
+            set
+            {
+                _showSpaces = value;
+                model.ForEach(ele => {
+                    if (ele.Tag.ToString().StartsWith("IfcSpace")) {
+                        ele.IsRendering = _showSpaces;
+                    }
+                });
+            }
+        }
+        public bool ShowElements
+        {
+            get
+            {
+                return _showElements;
+            }
+            set
+            {
+                _showElements = value;
+                model.ForEach(ele => {
+                    if (!ele.Tag.ToString().StartsWith("IfcSpace")) {
+                        ele.IsRendering = _showElements;
+                    }
+                });
+            }
+        }
 
         public bool Hover
         {
@@ -534,7 +570,7 @@ namespace IfcViewer.DX
                     _selectedIfcItem = _meshToIfcItems[mesh];
                     _selectedIfcItem.ifcTreeItem.treeNode.IsSelected = true;
                     _selectedIfcItem.ifcTreeItem.treeNode.Focus();
-//                    _selectedIfcItem.ifcTreeItem.treeNode.ExpandSubtree();
+                    //                    _selectedIfcItem.ifcTreeItem.treeNode.ExpandSubtree();
                 }
             }
 
@@ -584,6 +620,7 @@ namespace IfcViewer.DX
                     line.Color = _defaultLineColor;
                     item.Wireframe = line;
 
+                    line.Tag = item.ifcType + ":" + item.ifcID;
                     model.Add(line);
                 }
 
@@ -638,11 +675,12 @@ namespace IfcViewer.DX
                     //                    MeshGeometryModel3D mesh = new MeshGeometryModel3D() { Geometry = builder.ToMeshGeometry3D() };
                     item.Mesh3d = mesh;
                     _meshToIfcItems[mesh] = item;
-#if DEBUG
-                    OutputObj(item.ifcID.ToString(), meshGeometry);
-#endif
+                    //#if DEBUG
+                    //                    OutputObj(item.ifcID.ToString(), meshGeometry);
+                    //#endif
                     FillMeshByIfcColor(item);
 
+                    mesh.Tag = item.ifcType + ":" + item.ifcID;
                     model.Add(mesh);
                 }
 
