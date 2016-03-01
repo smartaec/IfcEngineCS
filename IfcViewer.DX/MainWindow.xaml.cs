@@ -37,9 +37,9 @@ namespace IfcViewer.DX
             dialog.ShowDialog();
             if (dialog.FileName != "") {
                 viewModel.OpenFile(dialog.FileName);
-                viewModel.Title = string.Format("{0}", System.IO.Path.GetFileNameWithoutExtension(dialog.FileName));
                 viewModel.ZoomExtent(this.view1);
                 this.view1.ReAttach();//without this, we'll get error when rendering
+                this.Title = string.Format("{0}(IfcViewer)", System.IO.Path.GetFileNameWithoutExtension(dialog.FileName));
             }
         }
     }

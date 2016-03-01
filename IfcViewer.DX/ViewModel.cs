@@ -64,6 +64,40 @@ namespace IfcViewer.DX
         public bool RenderLight3 { get; set; }
         public bool RenderLight4 { get; set; }
 
+        public bool RenderFaces
+        {
+            get
+            {
+                if (viewController != null) {
+                    return viewController.Faces;
+                }
+                return false;
+            }
+            set
+            {
+                if (viewController != null) {
+                    viewController.Faces = value;
+                }
+            }
+        }
+
+        public bool RenderWireframes
+        {
+            get
+            {
+                if (viewController != null) {
+                    return viewController.WireFrames;
+                }
+                return false;
+            }
+            set
+            {
+                if (viewController != null) {
+                    viewController.WireFrames = value;
+                }
+            }
+        }
+
         ViewController viewController;
         public MainViewModel(Viewport3DX viewport, TreeView treeview)
         {
@@ -81,8 +115,8 @@ namespace IfcViewer.DX
             this.AmbientLightColor = new Color4(0.2f, 0.2f, 0.2f, 1.0f);
 
             this.RenderLight1 = true;
-            this.RenderLight2 = true;
-            this.RenderLight3 = true;
+            this.RenderLight2 = false;
+            this.RenderLight3 = false;
             this.RenderLight4 = true;
 
             this.Light1Color = (Color4)Color.White;
@@ -96,14 +130,14 @@ namespace IfcViewer.DX
 
             this.Light1Direction = new Vector3(0, -10, -10);
             this.Light1Transform = new TranslateTransform3D(-Light1Direction.ToVector3D());
-            this.Light1DirectionTransform = CreateAnimatedTransform2(-Light1Direction.ToVector3D(), new Vector3D(0, 1, -1), 24);
+            //            this.Light1DirectionTransform = CreateAnimatedTransform2(-Light1Direction.ToVector3D(), new Vector3D(0, 1, -1), 24);
 
-            this.Light2Transform = CreateAnimatedTransform1(new Vector3D(-4, 0, 0), new Vector3D(0, 0, 1), 3);
-            this.Light3Transform = CreateAnimatedTransform1(new Vector3D(0, 0, 4), new Vector3D(0, 1, 0), 5);
+            //            this.Light2Transform = CreateAnimatedTransform1(new Vector3D(-4, 0, 0), new Vector3D(0, 0, 1), 3);
+            //            this.Light3Transform = CreateAnimatedTransform1(new Vector3D(0, 0, 4), new Vector3D(0, 1, 0), 5);
 
             this.Light4Direction = new Vector3(0, -5, 0);
             this.Light4Transform = new TranslateTransform3D(-Light4Direction.ToVector3D());
-            this.Light4DirectionTransform = CreateAnimatedTransform2(-Light4Direction.ToVector3D(), new Vector3D(1, 0, 0), 12);
+            //            this.Light4DirectionTransform = CreateAnimatedTransform2(-Light4Direction.ToVector3D(), new Vector3D(1, 0, 0), 12);
 
             // ----------------------------------------------
             // light model3d

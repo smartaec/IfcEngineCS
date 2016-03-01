@@ -402,6 +402,11 @@ namespace IfcViewer.DX
             set
             {
                 _enableWireFrames = value;
+                model.ForEach(ele => {
+                    if (ele is LineGeometryModel3D) {
+                        ele.IsRendering = _enableWireFrames;
+                    }
+                });
             }
         }
         public bool Faces
@@ -413,6 +418,11 @@ namespace IfcViewer.DX
             set
             {
                 _enableFaces = value;
+                model.ForEach(ele => {
+                    if (ele is MeshGeometryModel3D) {
+                        ele.IsRendering = _enableFaces;
+                    }
+                });
             }
         }
 
@@ -512,6 +522,7 @@ namespace IfcViewer.DX
         private void OnModelSelected(Model3D model)
         {
             if (_selectedIfcItem != null) {
+                _selectedIfcItem.ifcTreeItem.treeNode.IsSelected = false;
                 FillMeshByIfcColor(_selectedIfcItem);
                 _selectedIfcItem = null;
             }
@@ -523,7 +534,7 @@ namespace IfcViewer.DX
                     _selectedIfcItem = _meshToIfcItems[mesh];
                     _selectedIfcItem.ifcTreeItem.treeNode.IsSelected = true;
                     _selectedIfcItem.ifcTreeItem.treeNode.Focus();
-                    //                    _selectedIfcItem.ifcTreeItem.treeNode.ExpandSubtree();
+//                    _selectedIfcItem.ifcTreeItem.treeNode.ExpandSubtree();
                 }
             }
 
