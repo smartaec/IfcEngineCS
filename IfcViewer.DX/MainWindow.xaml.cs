@@ -13,6 +13,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using DataFormats = System.Windows.Forms.DataFormats;
+using DragEventArgs = System.Windows.DragEventArgs;
 
 namespace IfcViewer.DX
 {
@@ -27,6 +29,25 @@ namespace IfcViewer.DX
             InitializeComponent();
             viewModel = new MainViewModel(this.view1, this.tree1);
             this.DataContext = viewModel;
+        }
+
+        protected override void OnDragEnter(DragEventArgs e)
+        {
+            base.OnDragEnter(e);
+            Console.WriteLine(e.Data.GetData(typeof(string)));
+        }
+
+        protected override void OnPreviewDragEnter(DragEventArgs e)
+        {
+            base.OnPreviewDragEnter(e);
+            Console.WriteLine(e.Data.GetDataPresent(DataFormats.FileDrop));
+        }
+
+        protected override void OnDrop(DragEventArgs e)
+        {
+            base.OnDrop(e);
+            Console.WriteLine(e.Data.GetDataPresent(DataFormats.FileDrop));
+
         }
 
         private void Button1_OnClick(object sender, RoutedEventArgs e)

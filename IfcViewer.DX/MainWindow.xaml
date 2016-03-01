@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:hx="http://helix-toolkit.org/wpf/SharpDX"
         mc:Ignorable="d"               
-        Title="IfcViewer SharpDX" Height="700" Width="1200">
+        Title="IfcViewer SharpDX" Height="700" Width="1200"
+        AllowDrop="True"
+        >
     <Grid >
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -46,7 +48,7 @@
             <hx:GroupModel3D Children="{Binding Model,UpdateSourceTrigger=PropertyChanged}"></hx:GroupModel3D>
         </hx:Viewport3DX>
         <StackPanel>
-            <Button Grid.Row="0" Name="button1" Width="40" Height="24" HorizontalAlignment="Right" VerticalAlignment="Top" Content="Open" Click="Button1_OnClick">
+            <Button Grid.Row="0" Name="button1" Width="40" Height="24" Margin="10" Background="WhiteSmoke"  HorizontalAlignment="Right" VerticalAlignment="Top" Content="Open" Click="Button1_OnClick">
             </Button>
             <Expander Grid.Row="0" Width="Auto"  MinWidth="200" HorizontalAlignment="Right" VerticalAlignment="Top" VerticalContentAlignment="Stretch" Header="Settings" BorderBrush="LightGray" IsExpanded="True" Margin="10">
                 <Expander.Background>
