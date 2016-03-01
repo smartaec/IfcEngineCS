@@ -1,4 +1,11 @@
-﻿using System;
+﻿/* ***********************************************
+ * author :  LinJiarui
+ * email  :  lin@bimer.cn
+ * file   :  CIFCTreeData
+ * history:  created by LinJiarui at 2015/8/7 (copy from IfcEngine C# demo and modified)
+ *           modified by
+ * ***********************************************/
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;

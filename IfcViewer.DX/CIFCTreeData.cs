@@ -2,19 +2,20 @@
  * author :  LinJiarui
  * email  :  lin@bimer.cn
  * file   :  CIFCTreeData
- * history:  created by LinJiarui at 2015/8/7 (copy from IfcEngine C# demo and modified)
+ * history:  created by LinJiarui at 2016/2/29 18:36:39
  *           modified by
  * ***********************************************/
-
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
-using System.Drawing;
+using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Windows.Media;
 using IfcEngineCS;
+using System.Runtime.InteropServices;
 
-namespace IFCViewer
+namespace IfcViewer.DX
 {
     /// <summary>
     /// Describe the color of IFCItem.
@@ -40,7 +41,7 @@ namespace IFCViewer
         /// <summary>
         /// Node.
         /// </summary>
-        public TreeNode treeNode = null;
+        public TreeViewItem treeNode = null;
 
         /// <summary>
         /// If it is not null the item can be selected.
@@ -61,9 +62,7 @@ namespace IFCViewer
             {
                 System.Diagnostics.Debug.Assert(treeNode != null, "Internal error.");
 
-                if (treeNode.ImageIndex == CIFCTreeData.IMAGE_CHECKED) {
-                    return true;
-                }
+                if (treeNode.IsSelected) { return true; }
 
                 return false;
             }
@@ -133,7 +132,7 @@ namespace IFCViewer
         /// </summary>
         public void BuildTree(ViewController ifcViewer, IntPtr ifcModel, IFCItem ifcRoot, TreeView treeControl)
         {
-            treeControl.Nodes.Clear();
+            treeControl.Items.Clear();
 
             if (ifcViewer == null) {
                 throw new ArgumentException("The viewer is null.");
@@ -150,8 +149,6 @@ namespace IFCViewer
             if (treeControl == null) {
                 throw new ArgumentException("The tree control is null.");
             }
-
-            Cursor.Current = Cursors.WaitCursor;
 
             _viewController = ifcViewer;
             _ifcModel = ifcModel;
@@ -171,93 +168,93 @@ namespace IFCViewer
         private void CreateHeaderTreeItems()
         {
             // Header info
-            TreeNode tnHeaderInfo = _treeControl.Nodes.Add("Header Info");
-            tnHeaderInfo.ImageIndex = tnHeaderInfo.SelectedImageIndex = IMAGE_PROPERTY_SET;
+            var tnHeaderInfo = new TreeViewItem() { Header = "Header Info" };
+            _treeControl.Items.Add(tnHeaderInfo);
 
             // Descriptions
-            TreeNode tnDescriptions = tnHeaderInfo.Nodes.Add("Descriptions");
-            tnDescriptions.ImageIndex = tnDescriptions.SelectedImageIndex = IMAGE_PROPERTY;
+            var tnDescriptions = new TreeViewItem() { Header = "Descriptions" };
+            tnHeaderInfo.Items.Add(tnDescriptions);
 
             int i = 0;
             IntPtr description;
             while (_ifcEngine.GetSPFFHeaderItem(_ifcModel, 0, i++, IfcEngine.SdaiType.Unicode, out description) == IntPtr.Zero) {
-                TreeNode tnDescription = tnDescriptions.Nodes.Add(Marshal.PtrToStringUni(description));
-                tnDescription.ImageIndex = tnDescription.SelectedImageIndex = IMAGE_PROPERTY;
+                var tnDescription = new TreeViewItem() { Header = Marshal.PtrToStringUni(description) };
+                tnDescriptions.Items.Add(tnDescription);
             }
 
             // ImplementationLevel
             IntPtr implementationLevel;
             _ifcEngine.GetSPFFHeaderItem(_ifcModel, 1, 0, IfcEngine.SdaiType.Unicode, out implementationLevel);
 
-            TreeNode tnImplementationLevel = tnHeaderInfo.Nodes.Add("ImplementationLevel = '" + Marshal.PtrToStringUni(implementationLevel) + "'");
-            tnImplementationLevel.ImageIndex = tnImplementationLevel.SelectedImageIndex = IMAGE_PROPERTY;
+            var tnImplementationLevel = new TreeViewItem() { Header = "ImplementationLevel = '" + Marshal.PtrToStringUni(implementationLevel) + "'" };
+            tnHeaderInfo.Items.Add(tnImplementationLevel);
 
             // Name
             IntPtr name;
             _ifcEngine.GetSPFFHeaderItem(_ifcModel, 2, 0, IfcEngine.SdaiType.Unicode, out name);
 
-            TreeNode tnName = tnHeaderInfo.Nodes.Add("Name = '" + Marshal.PtrToStringUni(name) + "'");
-            tnName.ImageIndex = tnName.SelectedImageIndex = IMAGE_PROPERTY;
+            var tnName = new TreeViewItem() { Header = "Name = '" + Marshal.PtrToStringUni(name) + "'" };
+            tnHeaderInfo.Items.Add(tnName);
 
             // TimeStamp
             IntPtr timeStamp;
             _ifcEngine.GetSPFFHeaderItem(_ifcModel, 3, 0, IfcEngine.SdaiType.Unicode, out timeStamp);
 
-            TreeNode tnTimeStamp = tnHeaderInfo.Nodes.Add("TimeStamp = '" + Marshal.PtrToStringUni(timeStamp) + "'");
-            tnTimeStamp.ImageIndex = tnTimeStamp.SelectedImageIndex = IMAGE_PROPERTY;
+            var tnTimeStamp = new TreeViewItem() { Header = "TimeStamp = '" + Marshal.PtrToStringUni(timeStamp) + "'" };
+            tnHeaderInfo.Items.Add(tnTimeStamp);
 
             // Authors
-            TreeNode tnAuthors = tnHeaderInfo.Nodes.Add("Authors");
-            tnAuthors.ImageIndex = tnAuthors.SelectedImageIndex = IMAGE_PROPERTY;
+            var tnAuthors = new TreeViewItem() { Header = "Authors" };
+            tnHeaderInfo.Items.Add(tnAuthors);
 
             i = 0;
             IntPtr author;
             while (_ifcEngine.GetSPFFHeaderItem(_ifcModel, 4, i++, IfcEngine.SdaiType.Unicode, out author) == IntPtr.Zero) {
-                TreeNode tnAuthor = tnAuthors.Nodes.Add(Marshal.PtrToStringUni(author));
-                tnAuthor.ImageIndex = tnAuthor.SelectedImageIndex = IMAGE_PROPERTY;
+                var tnAuthor = new TreeViewItem() { Header = Marshal.PtrToStringUni(author) };
+                tnAuthors.Items.Add(tnAuthor);
             }
 
             // Organizations
-            TreeNode tnOrganizations = tnHeaderInfo.Nodes.Add("Organizations");
-            tnOrganizations.ImageIndex = tnOrganizations.SelectedImageIndex = IMAGE_PROPERTY;
+            var tnOrganizations = new TreeViewItem() { Header = "Organizations" };
+            tnHeaderInfo.Items.Add(tnOrganizations);
 
             i = 0;
             IntPtr organization;
             while (_ifcEngine.GetSPFFHeaderItem(_ifcModel, 5, i++, IfcEngine.SdaiType.Unicode, out organization) == IntPtr.Zero) {
-                TreeNode tnOrganization = tnOrganizations.Nodes.Add(Marshal.PtrToStringUni(organization));
-                tnOrganization.ImageIndex = tnOrganization.SelectedImageIndex = IMAGE_PROPERTY;
+                var tnOrganization = new TreeViewItem() { Header = Marshal.PtrToStringUni(organization) };
+                tnOrganizations.Items.Add(tnOrganization);
             }
 
             // PreprocessorVersion
             IntPtr preprocessorVersion;
             _ifcEngine.GetSPFFHeaderItem(_ifcModel, 6, 0, IfcEngine.SdaiType.Unicode, out preprocessorVersion);
 
-            TreeNode tnPreprocessorVersion = tnHeaderInfo.Nodes.Add("PreprocessorVersion = '" + Marshal.PtrToStringUni(preprocessorVersion) + "'");
-            tnPreprocessorVersion.ImageIndex = tnPreprocessorVersion.SelectedImageIndex = IMAGE_PROPERTY;
+            var tnPreprocessorVersion = new TreeViewItem() { Header = "PreprocessorVersion = '" + Marshal.PtrToStringUni(preprocessorVersion) + "'" };
+            tnHeaderInfo.Items.Add(tnPreprocessorVersion);
 
             // OriginatingSystem
             IntPtr originatingSystem;
             _ifcEngine.GetSPFFHeaderItem(_ifcModel, 7, 0, IfcEngine.SdaiType.Unicode, out originatingSystem);
 
-            TreeNode tnOriginatingSystem = tnHeaderInfo.Nodes.Add("OriginatingSystem = '" + Marshal.PtrToStringUni(originatingSystem) + "'");
-            tnOriginatingSystem.ImageIndex = tnOriginatingSystem.SelectedImageIndex = IMAGE_PROPERTY;
+            var tnOriginatingSystem = new TreeViewItem() { Header = "OriginatingSystem = '" + Marshal.PtrToStringUni(originatingSystem) + "'" };
+            tnHeaderInfo.Items.Add(tnOriginatingSystem);
 
             // Authorization
             IntPtr authorization;
             _ifcEngine.GetSPFFHeaderItem(_ifcModel, 8, 0, IfcEngine.SdaiType.Unicode, out authorization);
 
-            TreeNode tnAuthorization = tnHeaderInfo.Nodes.Add("Authorization = '" + Marshal.PtrToStringUni(authorization) + "'");
-            tnAuthorization.ImageIndex = tnAuthorization.SelectedImageIndex = IMAGE_PROPERTY;
+            var tnAuthorization = new TreeViewItem() { Header = "Authorization = '" + Marshal.PtrToStringUni(authorization) + "'" };
+            tnHeaderInfo.Items.Add(tnAuthorization);
 
             // FileSchemas
-            TreeNode tnFileSchemas = tnHeaderInfo.Nodes.Add("FileSchemas");
-            tnFileSchemas.ImageIndex = tnFileSchemas.SelectedImageIndex = IMAGE_PROPERTY;
+            var tnFileSchemas = new TreeViewItem() { Header = "FileSchemas" };
+            tnHeaderInfo.Items.Add(tnFileSchemas);
 
             i = 0;
             IntPtr fileSchema;
             while (_ifcEngine.GetSPFFHeaderItem(_ifcModel, 9, i++, IfcEngine.SdaiType.Unicode, out fileSchema) == IntPtr.Zero) {
-                TreeNode tnFileSchema = tnFileSchemas.Nodes.Add(Marshal.PtrToStringUni(fileSchema));
-                tnFileSchema.ImageIndex = tnFileSchema.SelectedImageIndex = IMAGE_PROPERTY;
+                var tnFileSchema = new TreeViewItem() { Header = Marshal.PtrToStringUni(fileSchema) };
+                tnFileSchemas.Items.Add(tnFileSchema);
             }
         }
 
@@ -277,7 +274,6 @@ namespace IFCViewer
                 ifcTreeItem.instance = iInstance;
 
                 CreateTreeItem(null, ifcTreeItem);
-                ifcTreeItem.treeNode.ImageIndex = ifcTreeItem.treeNode.SelectedImageIndex = IMAGE_CHECKED;
 
                 AddChildrenTreeItems(ifcTreeItem, iInstance, "IfcSite");
             } // for (int iEntity = ...
@@ -289,16 +285,16 @@ namespace IFCViewer
         private void CreateNotReferencedTreeItems()
         {
             IFCTreeItem ifcTreeItem = new IFCTreeItem();
-            ifcTreeItem.treeNode = _treeControl.Nodes.Add("Not Referenced");
-            ifcTreeItem.treeNode.ForeColor = Color.Gray;
-            ifcTreeItem.treeNode.ImageIndex = ifcTreeItem.treeNode.SelectedImageIndex = IMAGE_CHECKED;
+            ifcTreeItem.treeNode = new TreeViewItem() { Header = "Not Referenced" };
+            _treeControl.Items.Add(ifcTreeItem.treeNode);
+            ifcTreeItem.treeNode.Foreground = new SolidColorBrush(Colors.Gray);
             ifcTreeItem.treeNode.Tag = ifcTreeItem;
 
             FindNonReferencedIFCItems(_ifcRoot, ifcTreeItem.treeNode);
 
-            if (ifcTreeItem.treeNode.Nodes.Count == 0) {
+            if (ifcTreeItem.treeNode.Items.Count == 0) {
                 // don't show empty Not Referenced item
-                _treeControl.Nodes.Remove(ifcTreeItem.treeNode);
+                _treeControl.Items.Remove(ifcTreeItem.treeNode);
             }
         }
 
@@ -344,7 +340,6 @@ namespace IFCViewer
                     ifcTreeItem.instance = iObjectInstance;
 
                     CreateTreeItem(ifcParent, ifcTreeItem);
-                    ifcTreeItem.treeNode.ImageIndex = ifcTreeItem.treeNode.SelectedImageIndex = IMAGE_CHECKED;
 
                     switch (strEntityName) {
                         case "IfcSite": {
@@ -410,9 +405,6 @@ namespace IFCViewer
 
                     if (ifcTreeItem.ifcItem != null) {
                         ifcTreeItem.ifcItem.ifcTreeItem = ifcTreeItem;
-                        ifcTreeItem.treeNode.ImageIndex = ifcTreeItem.treeNode.SelectedImageIndex = IMAGE_CHECKED;
-                    } else {
-                        ifcTreeItem.treeNode.ImageIndex = ifcTreeItem.treeNode.SelectedImageIndex = IMAGE_NOT_REFERENCED;
                     }
                 } // for (int iObject = ...
             } // for (int iDecomposition = ...
@@ -452,11 +444,8 @@ namespace IFCViewer
 
                     if (ifcTreeItem.ifcItem != null) {
                         ifcTreeItem.ifcItem.ifcTreeItem = ifcTreeItem;
-                        ifcTreeItem.treeNode.ImageIndex = ifcTreeItem.treeNode.SelectedImageIndex = IMAGE_CHECKED;
 
                         GetColor(ifcTreeItem);
-                    } else {
-                        ifcTreeItem.treeNode.ImageIndex = ifcTreeItem.treeNode.SelectedImageIndex = IMAGE_NOT_REFERENCED;
                     }
 
                     IntPtr definedByInstances;
@@ -710,7 +699,6 @@ namespace IFCViewer
                 ifcPropertySetTreeItem.instance = propertyInstances;
 
                 CreateTreeItem(ifcParent, ifcPropertySetTreeItem);
-                ifcPropertySetTreeItem.treeNode.ImageIndex = ifcPropertySetTreeItem.treeNode.SelectedImageIndex = IMAGE_PROPERTY_SET;
 
                 // check for quantity
                 IntPtr quantitiesInstance;
@@ -752,7 +740,6 @@ namespace IFCViewer
                     ifcPropertySetTreeItem.instance = propertyInstances;
 
                     CreateTreeItem(ifcParent, ifcPropertySetTreeItem);
-                    ifcPropertySetTreeItem.treeNode.ImageIndex = ifcPropertySetTreeItem.treeNode.SelectedImageIndex = IMAGE_PROPERTY_SET;
 
                     // check for quantity
                     IntPtr propertiesInstance;
@@ -804,14 +791,16 @@ namespace IFCViewer
                     "' (" + strIfcType + ")";
 
             if ((ifcParent != null) && (ifcParent.treeNode != null)) {
-                ifcItem.treeNode = ifcParent.treeNode.Nodes.Add(strItemText);
+                ifcItem.treeNode = new TreeViewItem() { Header = strItemText };
+                ifcParent.treeNode.Items.Add(ifcItem.treeNode);
             } else {
-                ifcItem.treeNode = _treeControl.Nodes.Add(strItemText);
+                ifcItem.treeNode = new TreeViewItem() { Header = strItemText };
+                _treeControl.Items.Add(ifcItem.treeNode);
             }
 
             if (ifcItem.ifcItem == null) {
                 // item without visual representation
-                ifcItem.treeNode.ForeColor = Color.Gray;
+                ifcItem.treeNode.Foreground = new SolidColorBrush(Colors.Gray);
             }
 
             ifcItem.treeNode.Tag = ifcItem;
@@ -899,17 +888,18 @@ namespace IFCViewer
                     "' (" + strIfcType + ")";
 
             if ((ifcParent != null) && (ifcParent.treeNode != null)) {
-                ifcItem.treeNode = ifcParent.treeNode.Nodes.Add(strItemText);
+                ifcItem.treeNode = new TreeViewItem() { Header = strItemText };
+                ifcParent.treeNode.Items.Add(ifcItem.treeNode);
             } else {
-                ifcItem.treeNode = _treeControl.Nodes.Add(strItemText);
+                ifcItem.treeNode = new TreeViewItem() { Header = strItemText };
+                _treeControl.Items.Add(ifcItem.treeNode);
             }
 
             if (ifcItem.ifcItem == null) {
                 // item without visual representation
-                ifcItem.treeNode.ForeColor = Color.Gray;
+                ifcItem.treeNode.Foreground = new SolidColorBrush(Colors.Gray);
             }
 
-            ifcItem.treeNode.ImageIndex = ifcItem.treeNode.SelectedImageIndex = IMAGE_PROPERTY;
         }
 
         /// <summary>
@@ -943,7 +933,7 @@ namespace IFCViewer
         /// Helper
         /// </summary>
         /// <param name="ifcTreeItem"></param>
-        private void FindNonReferencedIFCItems(IFCItem ifcParent, TreeNode tnNotReferenced)
+        private void FindNonReferencedIFCItems(IFCItem ifcParent, TreeViewItem tnNotReferenced)
         {
             if (ifcParent == null) {
                 return;
@@ -958,16 +948,14 @@ namespace IFCViewer
 
                     IFCTreeItem ifcTreeItem = new IFCTreeItem();
                     ifcTreeItem.instance = ifcIterator.ifcID;
-                    ifcTreeItem.treeNode = tnNotReferenced.Nodes.Add(strItemText);
+                    ifcTreeItem.treeNode = new TreeViewItem() { Header = strItemText };
+                    tnNotReferenced.Items.Add(ifcTreeItem.treeNode);
                     ifcTreeItem.ifcItem = FindIFCItem(_ifcRoot, ifcTreeItem);
                     ifcIterator.ifcTreeItem = ifcTreeItem;
                     ifcTreeItem.treeNode.Tag = ifcTreeItem;
 
                     if (ifcTreeItem.ifcItem != null) {
                         ifcTreeItem.ifcItem.ifcTreeItem = ifcTreeItem;
-                        ifcTreeItem.treeNode.ImageIndex = ifcTreeItem.treeNode.SelectedImageIndex = IMAGE_CHECKED;
-                    } else {
-                        ifcTreeItem.treeNode.ImageIndex = ifcTreeItem.treeNode.SelectedImageIndex = IMAGE_NOT_REFERENCED;
                     }
                 }
 
@@ -1005,206 +993,6 @@ namespace IFCViewer
             return false;
         }
 
-        /// <summary>
-        /// Handler
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public void OnNodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
-        {
-            Rectangle rcIcon = new Rectangle(e.Node.Bounds.Location - new Size(16, 0), new Size(16, 16));
-            if (!rcIcon.Contains(e.Location)) {
-                return;
-            }
-
-            if (e.Node.Tag == null) {
-                // skip properties
-                return;
-            }
-
-            switch (e.Node.ImageIndex) {
-                case IMAGE_CHECKED: {
-                        e.Node.ImageIndex = e.Node.SelectedImageIndex = IMAGE_UNCHECKED;
-
-                        OnNodeMouseClick_UpdateChildrenTreeItems(e.Node);
-                        UpdateParentTreeItems(e.Node);
-
-                        _viewController.Redraw();
-                    }
-                    break;
-
-                case IMAGE_UNCHECKED: {
-                        e.Node.ImageIndex = e.Node.SelectedImageIndex = IMAGE_CHECKED;
-
-                        OnNodeMouseClick_UpdateChildrenTreeItems(e.Node);
-                        UpdateParentTreeItems(e.Node);
-
-                        _viewController.Redraw();
-                    }
-                    break;
-            } // switch (e.Node.ImageIndex)
-        }
-
-        /// <summary>
-        /// Helper
-        /// </summary>
-        /// <param name="tnParent"></param>
-        private void OnNodeMouseClick_UpdateChildrenTreeItems(TreeNode tnParent)
-        {
-            var treeItem = (tnParent.Tag as IFCTreeItem);
-            if (treeItem != null && treeItem.ifcItem != null && treeItem.ifcItem.Mesh3d != null) {
-                treeItem.ifcItem.Mesh3d.Visible = (tnParent.ImageIndex == IMAGE_CHECKED);
-            }
-
-            foreach (TreeNode tnChild in tnParent.Nodes) {
-                if ((tnChild.ImageIndex != IMAGE_CHECKED) && (tnChild.ImageIndex != IMAGE_UNCHECKED)) {
-                    // skip properties
-                    continue;
-                }
-
-                switch (tnParent.ImageIndex) {
-                    case IMAGE_CHECKED: {
-                            tnChild.ImageIndex = tnChild.SelectedImageIndex = IMAGE_CHECKED;
-                        }
-                        break;
-
-                    case IMAGE_UNCHECKED: {
-                            tnChild.ImageIndex = tnChild.SelectedImageIndex = IMAGE_UNCHECKED;
-                        }
-                        break;
-                } // switch (tnParent.ImageIndex)
-
-                OnNodeMouseClick_UpdateChildrenTreeItems(tnChild);
-            } // foreach (TreeNode tnChild in ...
-        }
-
-        /// <summary>
-        /// Helper
-        /// </summary>
-        /// <param name="tnItem"></param>
-        private void UpdateParentTreeItems(TreeNode tnItem)
-        {
-            if (tnItem.Parent == null) {
-                return;
-            }
-
-            int iCheckedChildrenCount = 0;
-            foreach (TreeNode tnChild in tnItem.Parent.Nodes) {
-                if ((tnChild.ImageIndex != IMAGE_CHECKED) && (tnChild.ImageIndex != IMAGE_UNCHECKED)) {
-                    // skip properties
-                    continue;
-                }
-
-                if (tnChild.ImageIndex == IMAGE_CHECKED) {
-                    iCheckedChildrenCount++;
-                }
-            } // foreach (TreeNode tnChild in ...
-
-            tnItem.Parent.ImageIndex = tnItem.Parent.SelectedImageIndex = iCheckedChildrenCount > 0 ? IMAGE_CHECKED : IMAGE_UNCHECKED;
-
-            UpdateParentTreeItems(tnItem.Parent);
-        }
-
-        /// <summary>
-        /// Handler
-        /// </summary>
-        public void OnAfterSelect(object sender, TreeViewEventArgs e)
-        {
-            if (e.Node.Tag == null) {
-                // skip properties
-                return;
-            }
-
-            if (e.Node.ImageIndex != IMAGE_CHECKED) {
-                // skip unvisible & not referenced items
-                return;
-            }
-
-            _viewController.SelectItem((e.Node.Tag as IFCTreeItem).ifcItem);
-        }
-
-        /// <summary>
-        /// Handler
-        /// </summary>
-        public void OnContextMenu_Opened(object sender, EventArgs e)
-        {
-            ContextMenuStrip contextMenu = sender as ContextMenuStrip;
-
-            contextMenu.Items.Clear();
-            foreach (var pair in this._dicCheckedElements) {
-                ToolStripMenuItem menuItem = contextMenu.Items.Add(pair.Key) as ToolStripMenuItem;
-                menuItem.CheckOnClick = true;
-                menuItem.Checked = pair.Value;
-
-                menuItem.Click += new EventHandler(delegate(object item, EventArgs args) {
-                    _dicCheckedElements[((ToolStripMenuItem)item).Text] = ((ToolStripMenuItem)item).Checked;
-
-                    foreach (TreeNode node in _treeControl.Nodes) {
-                        OnContextMenu_UpdateTreeElement(node);
-                    }
-
-                    _viewController.Redraw();
-                });
-            }
-        }
-
-        /// <summary>
-        /// Helper
-        /// </summary>
-        /// <param name="tnParent"></param>
-        private void OnContextMenu_UpdateTreeElement(TreeNode tnParent)
-        {
-            if (tnParent.Tag != null) {
-                OnContextMenu_UpdateTreeElement(tnParent.Tag as IFCTreeItem);
-            }
-
-            foreach (TreeNode tnChild in tnParent.Nodes) {
-                if (tnChild.Tag != null) {
-                    OnContextMenu_UpdateTreeElement(tnChild.Tag as IFCTreeItem);
-                }
-
-                OnContextMenu_UpdateTreeElement(tnChild);
-            } // foreach (TreeNode tnChild in ...
-        }
-
-        /// <summary>
-        /// Helper
-        /// </summary>
-        /// <param name="ifcTreeItem"></param>
-        private void OnContextMenu_UpdateTreeElement(IFCTreeItem ifcTreeItem)
-        {
-            if (ifcTreeItem.ifcItem == null) {
-                // skip not referenced items
-                return;
-            }
-
-            if (string.IsNullOrEmpty(ifcTreeItem.ifcItem.ifcType)) {
-                // skip fake items
-                return;
-            }
-
-            if (!_dicCheckedElements.ContainsKey(ifcTreeItem.ifcItem.ifcType)) {
-                // skip non-element items
-                return;
-            }
-
-            ifcTreeItem.treeNode.ImageIndex = ifcTreeItem.treeNode.SelectedImageIndex =
-                _dicCheckedElements[ifcTreeItem.ifcItem.ifcType] ? IMAGE_CHECKED : IMAGE_UNCHECKED;
-
-            UpdateParentTreeItems(ifcTreeItem.treeNode);
-        }
-
-        /// <summary>
-        /// Helper
-        /// </summary>
-        /// <param name="ifcItem"></param>
-        public void OnSelectIFCElement(IFCItem ifcItem)
-        {
-            System.Diagnostics.Debug.Assert(ifcItem != null, "Internal error.");
-            System.Diagnostics.Debug.Assert(ifcItem.ifcTreeItem != null, "Internal error.");
-            System.Diagnostics.Debug.Assert(ifcItem.ifcTreeItem.treeNode != null, "Internal error.");
-
-            _treeControl.SelectedNode = ifcItem.ifcTreeItem.treeNode;
-        }
     }
+
 }

@@ -1,28 +1,31 @@
 ﻿/* ***********************************************
  * author :  LinJiarui
  * email  :  lin@bimer.cn
- * file   :  CIFCTreeData
- * history:  created by LinJiarui at 2015/8/7 (copy from IfcEngine C# demo and modified)
+ * file   :  ViewController
+ * history:  created by LinJiarui at 2016/2/29 18:41:41
  *           modified by
  * ***********************************************/
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Forms.Integration;
+using System.Runtime.InteropServices;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
-using HelixToolkit.Wpf;
-using IfcEngineCS;
-using System.Windows.Forms;
-using System.IO;
 using System.Xml;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
+using HelixToolkit.Wpf.SharpDX;
+using HelixToolkit.Wpf.SharpDX.Core;
+using IfcEngineCS;
+using SharpDX;
+using Color = SharpDX.Color;
+using Material = HelixToolkit.Wpf.SharpDX.Material;
+using MeshGeometry3D = HelixToolkit.Wpf.SharpDX.MeshGeometry3D;
+using Model3D = HelixToolkit.Wpf.SharpDX.Model3D;
 
-namespace IFCViewer
+namespace IfcViewer.DX
 {
     /// <summary>
     /// IFCItem presents a single ifc item for drawing 
@@ -84,8 +87,8 @@ namespace IFCViewer
         public int indexOffsetForWireFrame;
 
         public IFCTreeItem ifcTreeItem = null;
-        public MeshGeometryVisual3D Mesh3d;
-        public LinesVisual3D Wireframe;
+        public MeshGeometryModel3D Mesh3d;
+        public LineGeometryModel3D Wireframe;
     }
 
     /// <summary>
@@ -94,7 +97,7 @@ namespace IFCViewer
     class ViewController
     {
         private IFCItem _rootIfcItem = null;
-        private Control _destControl = null;
+
         private TreeView _treeControl = null;
         public CIFCTreeData _treeData = null;
         private bool _enableWireFrames = true;
@@ -106,23 +109,36 @@ namespace IFCViewer
         private float[] _minCorner;
         private float[] _maxCorner;
 
-        private Dictionary<MeshGeometryVisual3D, IFCItem> _meshToIfcItems = null;
+        private Dictionary<MeshGeometryModel3D, IFCItem> _meshToIfcItems = null;
         private IfcEngine _ifcEngine = null;
-        private Brush _hoverBrush = Brushes.BlueViolet;
-        private Brush _selectBrush = Brushes.Chartreuse;
-        private Color _defaultLineColor = Color.FromRgb(0, 0, 0);
-        private Brush _defaultBrush = Brushes.Gray;
-        public ViewController()
+        private Material _hoverMaterial = PhongMaterials.Violet;
+        private Material _selectMaterial = PhongMaterials.Chrome;
+        private Color _defaultLineColor = new Color(0, 0, 0);
+        private Material _defaultMaterial = PhongMaterials.Bronze;
+
+        private bool _makeModelCentered = true;
+        public Vector3 Max { get { return new Vector3(_maxCorner[0], _maxCorner[1], _maxCorner[2]) - Center; } }
+        public Vector3 Min { get { return new Vector3(_minCorner[0], _minCorner[1], _minCorner[2]) - Center; } }
+        public Vector3 Center
+        {
+            get
+            {
+                return _makeModelCentered ? Vector3.Zero : new Vector3(_minCorner[0] + _maxCorner[0], _minCorner[1] + _maxCorner[1], _minCorner[2] + _maxCorner[2]) * 0.5f;
+            }
+        }
+        public ViewController(bool makeModelCentered = true)
         {
             _ifcEngine = new IfcEngine();
             _treeData = new CIFCTreeData(_ifcEngine);
-            _meshToIfcItems = new Dictionary<MeshGeometryVisual3D, IFCItem>();
+            _meshToIfcItems = new Dictionary<MeshGeometryModel3D, IFCItem>();
             _minCorner = new float[3] { float.MaxValue, float.MaxValue, float.MaxValue };
             _maxCorner = new float[3] { float.MinValue, float.MinValue, float.MinValue };
+            _makeModelCentered = makeModelCentered;
         }
 
         public void Reset()
         {
+            model.Clear();
             _meshToIfcItems.Clear();
             _hoverIfcItem = null;
             _selectedIfcItem = null;
@@ -419,24 +435,15 @@ namespace IFCViewer
             }
         }
 
-        private HelixViewport3D hVp3D = null;
-        public void InitGraphics(Control destControl, TreeView destTreeControl)
+        private Viewport3DX hVp3D = null;
+        private Element3DCollection model;
+        public void InitGraphics(Viewport3DX viewport, Element3DCollection model, TreeView destTreeControl)
         {
-            _destControl = destControl;
+            this.model = model;
+            hVp3D = viewport;
             _treeControl = destTreeControl;
-            hVp3D = new HelixViewport3D();
-            var host = new ElementHost();
-            host.Dock = DockStyle.Fill;
-            host.Child = hVp3D;
-            _destControl.Controls.Add(host);
 
             BindMouseHandler();
-
-            var lights = new DefaultLights();
-            hVp3D.Children.Add(lights);
-
-            var teaPot = new Teapot();
-            hVp3D.Children.Add(teaPot);
         }
 
         public bool OpenIFCFile(string ifcFilePath)
@@ -463,8 +470,12 @@ namespace IFCViewer
         {
             if (_enableHover) {
                 var point = Mouse.GetPosition(hVp3D);
-                var hit = hVp3D.FindNearestVisual(point);
-                OnModelHovered(hit);
+                Point3D pnt;
+                Vector3D normal;
+                Model3D model;
+                if (hVp3D.FindNearest(point, out pnt, out normal, out model)) {
+                    OnModelHovered(model);
+                }
             }
         }
 
@@ -472,21 +483,25 @@ namespace IFCViewer
         {
             if (e.ChangedButton == MouseButton.Left) {
                 var point = Mouse.GetPosition(hVp3D);
-                var hit = hVp3D.FindNearestVisual(point);
-                OnModelSelected(hit);
+                Point3D pnt;
+                Vector3D normal;
+                Model3D model;
+                if (hVp3D.FindNearest(point, out pnt, out normal, out model)) {
+                    OnModelSelected(model);
+                }
             }
         }
 
-        private void OnModelHovered(Visual3D model)
+        private void OnModelHovered(Model3D model)
         {
             if (_hoverIfcItem != null) {
                 FillMeshByIfcColor(_hoverIfcItem);
                 _hoverIfcItem = null;
             }
             if (model != null) {
-                var mesh = (model as MeshGeometryVisual3D);
+                var mesh = (model as MeshGeometryModel3D);
                 if (mesh != null && _meshToIfcItems.ContainsKey(mesh)) {
-                    mesh.Fill = _hoverBrush;
+                    mesh.Material = _hoverMaterial;
                     _hoverIfcItem = _meshToIfcItems[mesh];
                 }
             }
@@ -494,7 +509,7 @@ namespace IFCViewer
             Redraw();
         }
 
-        private void OnModelSelected(Visual3D model)
+        private void OnModelSelected(Model3D model)
         {
             if (_selectedIfcItem != null) {
                 FillMeshByIfcColor(_selectedIfcItem);
@@ -502,14 +517,13 @@ namespace IFCViewer
             }
 
             if (model != null) {
-                var mesh = (model as MeshGeometryVisual3D);
+                var mesh = (model as MeshGeometryModel3D);
                 if (mesh != null && _meshToIfcItems.ContainsKey(mesh)) {
-                    mesh.Fill = _selectBrush;
+                    mesh.Material = _selectMaterial;
                     _selectedIfcItem = _meshToIfcItems[mesh];
-                    _selectedIfcItem.ifcTreeItem.treeNode.TreeView.SelectedNode = _selectedIfcItem.ifcTreeItem.treeNode;
-                    _selectedIfcItem.ifcTreeItem.treeNode.TreeView.Focus();
-                    //_selectedIfcItem.ifcTreeItem.treeNode.Expand();
-                    _selectedIfcItem.ifcTreeItem.treeNode.EnsureVisible();
+                    _selectedIfcItem.ifcTreeItem.treeNode.IsSelected = true;
+                    _selectedIfcItem.ifcTreeItem.treeNode.Focus();
+                    //                    _selectedIfcItem.ifcTreeItem.treeNode.ExpandSubtree();
                 }
             }
 
@@ -518,35 +532,30 @@ namespace IFCViewer
 
         private void InitModel()
         {
-            Vector3D center = new Vector3D((_minCorner[0] + _maxCorner[0]) / 2.0, (_minCorner[1] + _maxCorner[1]) / 2.0, (_minCorner[2] + _maxCorner[2]) / 2.0);
-            hVp3D.Children.Clear();
-            var lights = new DefaultLights();
-            hVp3D.Children.Add(lights);
+            Vector3 center = new Vector3((_minCorner[0] + _maxCorner[0]) / 2.0f, (_minCorner[1] + _maxCorner[1]) / 2.0f, (_minCorner[2] + _maxCorner[2]) / 2.0f);
             CreateMeshes(center);
             CreateWireframes(center);
-            var bound = hVp3D.Children.FindBounds();
-            hVp3D.ZoomExtents(bound);
         }
 
-        private void CreateWireframes(Vector3D center)
+        private void CreateWireframes(Vector3 center)
         {
             CreateWireFrameModels(_rootIfcItem, center);
         }
 
-        private void CreateWireFrameModels(IFCItem item, Vector3D center)
+        private void CreateWireFrameModels(IFCItem item, Vector3 center)
         {
             while (item != null) {
                 if (item.ifcID != IntPtr.Zero && item.noVerticesForWireFrame != 0 && item.noPrimitivesForWireFrame != 0) {
-                    var points = new Point3DCollection();
-                    Point3DCollection positions;
+                    var points = new Vector3Collection();
+                    Vector3Collection positions;
                     if (item.verticesForWireFrame != null) {
                         for (int i = 0; i < item.noVerticesForWireFrame; i++) {
-                            points.Add(new Point3D((item.verticesForWireFrame[3 * i + 0] - center.X), (item.verticesForWireFrame[3 * i + 1] - center.Y), (item.verticesForWireFrame[3 * i + 2] - center.Z)));
+                            points.Add(new Vector3((item.verticesForWireFrame[3 * i + 0] - center.X), (item.verticesForWireFrame[3 * i + 1] - center.Y), (item.verticesForWireFrame[3 * i + 2] - center.Z)));
                         }
                     }
 
                     if (item.indicesForWireFrameLineParts != null) {
-                        positions = new Point3DCollection();
+                        positions = new Vector3Collection();
                         for (int i = 0; i < item.noPrimitivesForWireFrame; i++) {
                             var idx = item.indicesForWireFrameLineParts[2 * i + 0];
                             positions.Add(points[idx]);
@@ -557,11 +566,14 @@ namespace IFCViewer
                         positions = points;
                     }
 
-                    LinesVisual3D wireframe = new LinesVisual3D();
-                    wireframe.Points = positions;
-                    wireframe.Color = _defaultLineColor;
-                    item.Wireframe = wireframe;
-                    hVp3D.Children.Add(wireframe);
+                    var lineBuilder = new LineBuilder();
+                    lineBuilder.Add(false, positions.ToArray());
+                    LineGeometryModel3D line = new LineGeometryModel3D();
+                    line.Geometry = lineBuilder.ToLineGeometry3D();
+                    line.Color = _defaultLineColor;
+                    item.Wireframe = line;
+
+                    model.Add(line);
                 }
 
                 CreateFaceModels(item.child, center);
@@ -569,21 +581,21 @@ namespace IFCViewer
             }
         }
 
-        private void CreateMeshes(Vector3D center)
+        private void CreateMeshes(Vector3 center)
         {
             CreateFaceModels(_rootIfcItem, center);
         }
 
-        private void CreateFaceModels(IFCItem item, Vector3D center)
+        private void CreateFaceModels(IFCItem item, Vector3 center)
         {
             while (item != null) {
                 if (item.ifcID != IntPtr.Zero && item.noVerticesForFaces != 0 && item.noPrimitivesForFaces != 0) {
-                    var positions = new Point3DCollection();
-                    var normals = new Vector3DCollection();
+                    var positions = new Vector3Collection();
+                    var normals = new Vector3Collection();
                     if (item.verticesForFaces != null) {
                         for (int i = 0; i < item.noVerticesForFaces; i++) {
-                            var point = new Point3D(item.verticesForFaces[6 * i + 0] - center.X, item.verticesForFaces[6 * i + 1] - center.Y, item.verticesForFaces[6 * i + 2] - center.Z);
-                            var normal = new Vector3D(item.verticesForFaces[6 * i + 3], item.verticesForFaces[6 * i + 4], item.verticesForFaces[6 * i + 5]);
+                            var point = new Vector3(item.verticesForFaces[6 * i + 0] - center.X, item.verticesForFaces[6 * i + 1] - center.Y, item.verticesForFaces[6 * i + 2] - center.Z);
+                            var normal = new Vector3(item.verticesForFaces[6 * i + 3], item.verticesForFaces[6 * i + 4], item.verticesForFaces[6 * i + 5]);
                             positions.Add(point);
                             normals.Add(normal);
                         }
@@ -591,19 +603,28 @@ namespace IFCViewer
                         Debug.Assert(item.verticesForFaces.Length == item.noVerticesForFaces * 6);
                     }
 
-                    var indices = new Int32Collection();
+                    var indices = new IntCollection();
                     if (item.indicesForFaces != null) {
                         for (int i = 0; i < 3 * item.noPrimitivesForFaces; i++) {
                             indices.Add(item.indicesForFaces[i]);
                         }
                     }
 
-                    MeshGeometry3D meshGeometry = new MeshGeometry3D();
+                    var meshGeometry = new MeshGeometry3D();
                     meshGeometry.Positions = positions;
                     meshGeometry.Normals = normals;
-                    meshGeometry.TriangleIndices = indices;
-                    MeshGeometryVisual3D mesh = new MeshGeometryVisual3D();
-                    mesh.MeshGeometry = meshGeometry;
+                    meshGeometry.Indices = indices;
+                    meshGeometry.TextureCoordinates = null;
+                    meshGeometry.Colors = null;
+                    meshGeometry.Tangents = null;
+                    meshGeometry.BiTangents = null;
+
+                    MeshGeometryModel3D mesh = new MeshGeometryModel3D() { Geometry = meshGeometry };
+                    //                    var builder = new MeshBuilder(true, false);
+                    //                    builder.Positions.AddRange(positions);
+                    //                    builder.Normals.AddRange(normals);
+                    //                    builder.TriangleIndices.AddRange(indices);
+                    //                    MeshGeometryModel3D mesh = new MeshGeometryModel3D() { Geometry = builder.ToMeshGeometry3D() };
                     item.Mesh3d = mesh;
                     _meshToIfcItems[mesh] = item;
 #if DEBUG
@@ -611,7 +632,7 @@ namespace IFCViewer
 #endif
                     FillMeshByIfcColor(item);
 
-                    hVp3D.Children.Add(mesh);
+                    model.Add(mesh);
                 }
 
                 CreateFaceModels(item.child, center);
@@ -626,7 +647,7 @@ namespace IFCViewer
                     writer.WriteLine("v {0} {1} {2}", rep.Positions[i].X, rep.Positions[i].Y, rep.Positions[i].Z);
                     writer.WriteLine("vn {0} {1} {2}", rep.Normals[i].X, rep.Normals[i].Y, rep.Normals[i].Z);
                 }
-                var indices = rep.TriangleIndices.Reverse().ToList();//HACK winding
+                var indices = rep.Indices.ToArray().Reverse().ToList();//HACK winding
                 for (int i = 0, count = indices.Count / 3; i < count; i++) {
                     writer.WriteLine("f {0}//{0} {1}//{1} {2}//{2}", indices[i * 3] + 1, indices[i * 3 + 1] + 1, indices[i * 3 + 2] + 1);
                 }
@@ -637,18 +658,23 @@ namespace IFCViewer
             if (item.Mesh3d != null) {
                 if (item.ifcTreeItem.ifcColor != null) {
                     var ifcColor = item.ifcTreeItem.ifcColor;
-                    var color = Color.FromArgb((byte)(255 - ifcColor.A * 255),
-                        (byte)(ifcColor.R * 255), (byte)(ifcColor.G * 255), (byte)(ifcColor.B * 255));
-                    item.Mesh3d.Fill = new SolidColorBrush(color);
+                    var color = System.Windows.Media.Color.FromArgb((byte)(255 - ifcColor.A * 255), (byte)(ifcColor.R * 255), (byte)(ifcColor.G * 255), (byte)(ifcColor.B * 255));
+                    item.Mesh3d.Material = new PhongMaterial() {
+                        AmbientColor = Colors.Black.ToColor4(),
+                        DiffuseColor = Colors.Black.ToColor4(),
+                        EmissiveColor = color.ToColor4(),
+                        ReflectiveColor = Colors.Black.ToColor4(),
+                        SpecularColor = color.ToColor4(),
+                    };
                 } else {
-                    item.Mesh3d.Fill = _defaultBrush;
+                    item.Mesh3d.Material = _defaultMaterial;
                 }
             }
         }
 
         public void Redraw()
         {
-            _destControl.Refresh();
+            //_destControl.Refresh();
         }
 
         public void SelectItem(IFCItem ifcItem)
@@ -659,4 +685,5 @@ namespace IFCViewer
             this.Redraw();
         }
     }
+
 }

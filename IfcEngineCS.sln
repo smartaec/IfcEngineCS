@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IfcEngineCS", "IfcEngineCS\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IfcViewer", "IfcViewer\IfcViewer.csproj", "{021F2965-2707-4BF4-82C0-7FF05BE1040B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IfcViewer.DX", "IfcViewer.DX\IfcViewer.DX.csproj", "{1D55A45E-9D6E-403C-9C42-018746455332}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,12 @@ Global
 		{021F2965-2707-4BF4-82C0-7FF05BE1040B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{021F2965-2707-4BF4-82C0-7FF05BE1040B}.Release|x86.ActiveCfg = Release|x86
 		{021F2965-2707-4BF4-82C0-7FF05BE1040B}.Release|x86.Build.0 = Release|x86
+		{1D55A45E-9D6E-403C-9C42-018746455332}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D55A45E-9D6E-403C-9C42-018746455332}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D55A45E-9D6E-403C-9C42-018746455332}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1D55A45E-9D6E-403C-9C42-018746455332}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D55A45E-9D6E-403C-9C42-018746455332}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D55A45E-9D6E-403C-9C42-018746455332}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
