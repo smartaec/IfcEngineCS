@@ -51,10 +51,10 @@
             <hx:PointLight3D       Color="{Binding Light3Color}" IsRendering="{Binding RenderLight3}" Attenuation="{Binding Light3Attenuation}" Transform="{Binding Light3Transform}"/>
             <hx:SpotLight3D        Color="{Binding Light4Color}" IsRendering="{Binding RenderLight4}" Attenuation="{Binding Light4Attenuation}" Transform="{Binding Light4Transform}" Direction="{Binding Light4Direction}" DirectionTransform="{Binding Light4DirectionTransform}"/>
 
-            <hx:MeshGeometryModel3D Geometry="{Binding Sphere}" IsRendering="{Binding RenderLight1}" Material="{Binding LightModelMaterial}" Transform="{Binding Light1Transform}"/>
-            <hx:MeshGeometryModel3D Geometry="{Binding Sphere}" IsRendering="{Binding RenderLight2}" Material="{Binding LightModelMaterial}" Transform="{Binding Light2Transform}"/>
-            <hx:MeshGeometryModel3D Geometry="{Binding Sphere}" IsRendering="{Binding RenderLight3}" Material="{Binding LightModelMaterial}" Transform="{Binding Light3Transform}"/>
-            <hx:MeshGeometryModel3D Geometry="{Binding Sphere}" IsRendering="{Binding RenderLight4}" Material="{Binding LightModelMaterial}" Transform="{Binding Light4Transform}"/>
+<!--            <hx:MeshGeometryModel3D Geometry="{Binding Sphere}" IsRendering="{Binding RenderLight1}" Material="{Binding LightModelMaterial}" Transform="{Binding Light1Transform}"/>-->
+<!--            <hx:MeshGeometryModel3D Geometry="{Binding Sphere}" IsRendering="{Binding RenderLight2}" Material="{Binding LightModelMaterial}" Transform="{Binding Light2Transform}"/>-->
+<!--            <hx:MeshGeometryModel3D Geometry="{Binding Sphere}" IsRendering="{Binding RenderLight3}" Material="{Binding LightModelMaterial}" Transform="{Binding Light3Transform}"/>-->
+<!--            <hx:MeshGeometryModel3D Geometry="{Binding Sphere}" IsRendering="{Binding RenderLight4}" Material="{Binding LightModelMaterial}" Transform="{Binding Light4Transform}"/>-->
 
             <hx:GroupModel3D Children="{Binding Model,UpdateSourceTrigger=PropertyChanged}"></hx:GroupModel3D>
         </hx:Viewport3DX>
