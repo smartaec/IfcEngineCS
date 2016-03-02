@@ -140,7 +140,7 @@ namespace IfcViewer.DX
 
             // ----------------------------------------------
             // camera setup
-            this.Camera = new PerspectiveCamera { Position = new Point3D(8, 9, 7), LookDirection = new Vector3D(-5, -12, -5), UpDirection = new Vector3D(0, 1, 0) };
+            this.Camera = new PerspectiveCamera { Position = new Point3D(8, 9, 7), LookDirection = new Vector3D(-5, -12, -5), UpDirection = new Vector3D(0, 0, 1) };
 
             // ----------------------------------------------
             // setup scene
