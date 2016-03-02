@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using DataFormats = System.Windows.Forms.DataFormats;
 using DragEventArgs = System.Windows.DragEventArgs;
+using MessageBox = System.Windows.MessageBox;
 
 namespace IfcViewer.DX
 {
@@ -62,6 +63,11 @@ namespace IfcViewer.DX
                 this.view1.ReAttach();//without this, we'll get error when rendering
                 this.Title = string.Format("{0}(IfcViewer)", System.IO.Path.GetFileNameWithoutExtension(dialog.FileName));
             }
+        }
+
+        private void MenuItem_OnClick(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show(this, "Ifc Viewer based on Helix3D and IfcEngine.\n By lin(at)bimer.cn", "About");
         }
     }
 }

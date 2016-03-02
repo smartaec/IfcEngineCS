@@ -20,6 +20,9 @@
             <MenuItem Header="File">
                 <MenuItem Header="Open" Click="Button1_OnClick"/>
             </MenuItem>
+            <MenuItem Header="Help">
+                <MenuItem Header="About" Click="MenuItem_OnClick"/>
+            </MenuItem>
         </Menu>
         <hx:Viewport3DX 
             Grid.Row="1"
