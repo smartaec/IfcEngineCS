@@ -16,12 +16,12 @@ namespace IfcSharpDXSampleProject
 
 
 
-        public ViewModel(Viewport3DX viewport,TreeView _treeview)
+        public ViewModel(Viewport3DX viewport, TreeView _treeview)
         {
             Viewport3D = viewport;
             viewController = new ViewController();
             Model = new Element3DCollection();
-            viewController.InitGraphics(Viewport3D, Model,_treeview);
+            viewController.InitGraphics(Viewport3D, Model, _treeview);
         }
 
         public void ParseFile(string fileName)
@@ -67,12 +67,9 @@ namespace IfcSharpDXSampleProject
         {
             get
             {
-                if (!_ShowFireFrame)
-                {
-                    Model.Where(x => x is LineGeometryModel3D).ToList().ForEach(x => x.IsRendering= false);
-                }
-                else
-                {
+                if (!_ShowFireFrame) {
+                    Model.Where(x => x is LineGeometryModel3D).ToList().ForEach(x => x.IsRendering = false);
+                } else {
                     Model.Where(x => x is LineGeometryModel3D).ToList().ForEach(x => x.IsRendering = true);
                 }
                 return _ShowFireFrame;
@@ -87,13 +84,10 @@ namespace IfcSharpDXSampleProject
         public Rect3D FindBounds()
         {
             var bounds = new global::SharpDX.BoundingBox();
-            foreach (var element in Model)
-            {
+            foreach (var element in Model) {
                 var model = element as IBoundable;
-                if (model != null)
-                {
-                    if (model.Visibility != Visibility.Collapsed)
-                    {
+                if (model != null) {
+                    if (model.Visibility != Visibility.Collapsed) {
                         bounds = global::SharpDX.BoundingBox.Merge(bounds, model.Bounds);
                     }
                 }
@@ -106,15 +100,14 @@ namespace IfcSharpDXSampleProject
             var diagonal = new Vector3D(bounds.SizeX, bounds.SizeY, bounds.SizeZ);
             var center = bounds.Location + (diagonal * 0.5);
             double radius = diagonal.Length * 0.5;
-            HelixToolkit.Wpf.SharpDX.PerspectiveCamera Camera = new HelixToolkit.Wpf.SharpDX.PerspectiveCamera()
-            {
+            HelixToolkit.Wpf.SharpDX.PerspectiveCamera Camera = new HelixToolkit.Wpf.SharpDX.PerspectiveCamera() {
 
                 Position = new Point3D(center.X + 30, center.Y + 30, center.Z + 50),
                 LookDirection = new Vector3D(-30, -30, -50),
                 UpDirection = new Vector3D(0, 0, 1),
-                FarPlaneDistance = 5000000,
+                FarPlaneDistance = radius * 10,
                 FieldOfView = 45,
-                NearPlaneDistance = 0.1,
+                NearPlaneDistance = 0.1 * radius,
 
             };
             viewport.Camera.Reset();
@@ -132,8 +125,7 @@ namespace IfcSharpDXSampleProject
         {
             var camera = viewport.Camera;
             var pcam = camera as HelixToolkit.Wpf.SharpDX.PerspectiveCamera;
-            if (pcam != null)
-            {
+            if (pcam != null) {
                 double disth = radius / Math.Tan(0.5 * pcam.FieldOfView * Math.PI / 180);
                 double vfov = pcam.FieldOfView / viewport.ActualWidth * viewport.ActualHeight;
                 double distv = radius / Math.Tan(0.5 * vfov * Math.PI / 180);
@@ -145,13 +137,11 @@ namespace IfcSharpDXSampleProject
             }
 
             var ocam = camera as HelixToolkit.Wpf.SharpDX.OrthographicCamera;
-            if (ocam != null)
-            {
+            if (ocam != null) {
                 ocam.LookAt(center, ocam.LookDirection, animationTime);
                 double newWidth = radius * 2;
 
-                if (viewport.ActualWidth > viewport.ActualHeight)
-                {
+                if (viewport.ActualWidth > viewport.ActualHeight) {
                     newWidth = radius * 2 * viewport.ActualWidth / viewport.ActualHeight;
                 }
 

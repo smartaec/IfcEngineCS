@@ -593,31 +593,35 @@ namespace IfcViewer.DX
         {
             while (item != null) {
                 if (item.ifcID != IntPtr.Zero && item.noVerticesForWireFrame != 0 && item.noPrimitivesForWireFrame != 0) {
+                    var geo = new LineGeometry3D();
+                    geo.Positions=new Vector3Collection();
+                    geo.Indices=new IntCollection();
                     var points = new Vector3Collection();
-                    Vector3Collection positions;
                     if (item.verticesForWireFrame != null) {
                         for (int i = 0; i < item.noVerticesForWireFrame; i++) {
                             points.Add(new Vector3((item.verticesForWireFrame[3 * i + 0] - center.X), (item.verticesForWireFrame[3 * i + 1] - center.Y), (item.verticesForWireFrame[3 * i + 2] - center.Z)));
+                            geo.Positions.Add(new Vector3((item.verticesForWireFrame[3 * i + 0] - center.X), (item.verticesForWireFrame[3 * i + 1] - center.Y), (item.verticesForWireFrame[3 * i + 2] - center.Z)));
                         }
                     }
 
                     if (item.indicesForWireFrameLineParts != null) {
-                        positions = new Vector3Collection();
                         for (int i = 0; i < item.noPrimitivesForWireFrame; i++) {
                             var idx = item.indicesForWireFrameLineParts[2 * i + 0];
-                            positions.Add(points[idx]);
+                            geo.Indices.Add(idx);
                             idx = item.indicesForWireFrameLineParts[2 * i + 1];
-                            positions.Add(points[idx]);
+                            geo.Indices.Add(idx);
                         }
                     } else {
-                        positions = points;
+                        for (int i = 0, count = points.Count; i < count; i++) {
+                            geo.Indices.Add(i);
+                            geo.Indices.Add((i + 1) % count);
+                        }
                     }
 
-                    var lineBuilder = new LineBuilder();
-                    lineBuilder.Add(false, positions.ToArray());
                     LineGeometryModel3D line = new LineGeometryModel3D();
-                    line.Geometry = lineBuilder.ToLineGeometry3D();
+                    line.Geometry = geo;
                     line.Color = _defaultLineColor;
+                    line.Thickness = 0.5;
                     item.Wireframe = line;
 
                     line.Tag = item.ifcType + ":" + item.ifcID;

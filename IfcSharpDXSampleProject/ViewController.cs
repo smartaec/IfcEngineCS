@@ -639,7 +639,7 @@ namespace IfcSharpDXSampleProject
                     item.Mesh3d = mesh;
                     _meshToIfcItems[mesh] = item;
 #if DEBUG
-                    OutputObj(item.ifcID.ToString(), mesh);
+                    //OutputObj(item.ifcID.ToString(), mesh);
 #endif
                     FillMeshByIfcColor(item);
 
